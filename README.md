@@ -50,3 +50,53 @@ Antes de iniciar, certifique-se de que o ambiente atende aos seguintes requisito
    sudo apt update &&
    sudo apt upgrade -y &&
    sudo apt install -y git python3-pip python3.11-venv postgresql postgresql-client
+
+No prompt do PostgreSQL, crie o banco de dados e o usuário:
+
+```sql
+CREATE DATABASE auth;
+CREATE USER auth WITH PASSWORD 'root';
+GRANT ALL PRIVILEGES ON DATABASE auth TO auth;
+```
+
+Saia do prompt do PostgreSQL com `\q`.
+
+Caso seja necessário, conceda permissões adicionais:
+
+```bash
+sudo -u postgres psql -d auth
+```
+
+```sql
+GRANT ALL PRIVILEGES ON SCHEMA public TO auth;
+```
+
+Para sair, digite `\q`.
+
+## Uso
+
+### Inicialização do Servidor
+
+Com o ambiente configurado, ative a venv e aplique as migrações:
+
+```bash
+source env/bin/activate  # No Windows use: env\Scripts\activate
+python3 manage.py migrate
+```
+
+Caso queira popular o banco de dados com dados iniciais:
+
+```bash
+python3 manage.py loaddata fixtures.json
+```
+
+Inicie o servidor:
+
+```bash
+python3 manage.py runserver 0:8000
+```
+
+A API estará disponível em `http://<ip_da_sua_maquina>:8000/`.
+
+Agora sua API de autenticação está pronta para uso!
+
