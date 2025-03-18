@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ltshk8lp_7f*my$gy-lb5+hcr1o=%!!#phi3x9$0gq5^of4r+!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'reader_leak'
 ]
 
 MIDDLEWARE = [
@@ -75,10 +76,15 @@ WSGI_APPLICATION = 'water_flow_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'waterflow', 
+        'USER': 'waterflow',  
+        'PASSWORD': 'root', 
+        'HOST': 'localhost', 
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
