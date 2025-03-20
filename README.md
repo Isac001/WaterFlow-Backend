@@ -51,11 +51,11 @@ Antes de iniciar, certifique-se de que o ambiente atende aos seguintes requisito
    sudo apt upgrade -y &&
    sudo apt install -y git python3-pip python3.11-venv postgresql postgresql-client
 
-No prompt do PostgreSQL, crie o banco de dados e o usuário:
+2. **No prompt do PostgreSQL, crie o banco de dados e o usuário:**
 
 ```sql
-CREATE DATABASE auth;
-CREATE USER auth WITH PASSWORD 'root';
+CREATE DATABASE waterflow;
+CREATE USER auth WITH PASSWORD 'waterflow';
 GRANT ALL PRIVILEGES ON DATABASE auth TO auth;
 ```
 
@@ -73,6 +73,12 @@ GRANT ALL PRIVILEGES ON SCHEMA public TO auth;
 
 Para sair, digite `\q`.
 
+3. **Instale as bibliotecas necessárias**
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Uso
 
 ### Inicialização do Servidor
@@ -83,13 +89,6 @@ Com o ambiente configurado, ative a venv e aplique as migrações:
 source env/bin/activate  # No Windows use: env\Scripts\activate
 python3 manage.py migrate
 ```
-
-Caso queira popular o banco de dados com dados iniciais:
-
-```bash
-python3 manage.py loaddata fixtures.json
-```
-
 Inicie o servidor:
 
 ```bash
