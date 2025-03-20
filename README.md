@@ -56,7 +56,6 @@ Antes de iniciar, certifique-se de que o ambiente atende aos seguintes requisito
    python3 -m venv env &&
    source env/bin/activate
 
-
 2. **No prompt do PostgreSQL, crie o banco de dados e o usuário:**
 
 ```sql
@@ -70,11 +69,11 @@ Saia do prompt do PostgreSQL com `\q`.
 Caso seja necessário, conceda permissões adicionais:
 
 ```bash
-sudo -u postgres psql -d auth
+sudo -u postgres psql -d waterflow
 ```
 
 ```sql
-GRANT ALL PRIVILEGES ON SCHEMA public TO auth;
+GRANT ALL PRIVILEGES ON SCHEMA public TO waterflow;
 ```
 
 Para sair, digite `\q`.
