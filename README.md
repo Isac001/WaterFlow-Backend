@@ -51,6 +51,12 @@ Antes de iniciar, certifique-se de que o ambiente atende aos seguintes requisito
    sudo apt upgrade -y &&
    sudo apt install -y git python3-pip python3.11-venv postgresql postgresql-client
 
+2. **Atualize o sistema e instale os pacotes necessários:**
+   ```bash
+   python3 -m venv env &&
+   source env/bin/activate
+
+
 2. **No prompt do PostgreSQL, crie o banco de dados e o usuário:**
 
 ```sql
