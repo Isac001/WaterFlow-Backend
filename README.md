@@ -55,7 +55,7 @@ Antes de iniciar, certifique-se de que o ambiente atende aos seguintes requisito
 
 ```sql
 CREATE DATABASE waterflow;
-CREATE USER auth WITH PASSWORD 'waterflow';
+CREATE USER waterflow WITH PASSWORD 'waterflow';
 GRANT ALL PRIVILEGES ON DATABASE auth TO auth;
 ```
 
