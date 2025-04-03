@@ -1,5 +1,6 @@
 # Import Django's model framework
 from django.db import models
+
 class FlowRating(models.Model):
     
     # Stores the timestamp of the reading, auto-generated when a record is created
@@ -11,3 +12,8 @@ class FlowRating(models.Model):
     # Returns a readable string representation of the record
     def __str__(self):
         return f"{self.timestamp.strftime('%Y-%m-%d %H:%M:%S')} - {self.flow_rate} L/min"
+    
+    class Meta:
+
+        app_label ='reader_leak'
+        db_table = 'reader_leak'
