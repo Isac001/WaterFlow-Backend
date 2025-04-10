@@ -2,15 +2,16 @@
 from rest_framework import serializers  
 
 # Import the FlowRating model
-from .models import FlowRating  
+from .models import FlowRating
+from django.utils.timezone import localtime
 
 # Serializer for FlowRating model
 class FlowReadingSerializer(serializers.ModelSerializer):
-
+    
     class Meta:
 
         # Specify the model to serialize
         model = FlowRating  
         
         # Define which fields should be serialized
-        fields = ['timestamp', 'flow_rate']  
+        fields = ['timestamp', 'flow_rate'] 

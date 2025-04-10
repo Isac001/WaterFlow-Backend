@@ -2,6 +2,8 @@
 import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from asgiref.sync import sync_to_async
+from datetime import datetime
+import pytz
 
 # Project Imports
 from apps.reader_leak.models import FlowRating
@@ -40,27 +42,37 @@ class FlowReadginConsumer(AsyncJsonWebsocketConsumer):
 
         # Maps the received message field
         flow_rate = flow_data_json.get('flow_rate')
+        timestamp_str = flow_data_json.get('timestamp')
 
-        if flow_rate is None:
+        if flow_rate is None or timestamp_str is None:
             
             print("Error: 'flow_rate' not found in data")
-            return 
+            return
+        
+        try:
 
-        # Saves the new reading to the database
-        flow_reading = await create_flow_reading(flow_rate)
+            flow_reading = await create_flow_reading(
+                flow_rate=flow_rate,
+                timestamp=timestamp_str
+            )
 
-        # Serializes the reading
-        serializer = FlowReadingSerializer(flow_reading)
-        message = serializer.data
+            serializer = FlowReadingSerializer(instance=flow_reading)
 
-        # Sends the flow reading to the WebSocket group
-        await self.channel_layer.group_send(
-            self.reader_group_name,
-            {
-                'type': 'send_flow_reading',
-                'message': message
-            }
-        )
+            message = serializer.data
+
+
+            # Sends the flow reading to the WebSocket group
+            await self.channel_layer.group_send(
+                self.reader_group_name,
+                {
+                    'type': 'send_flow_reading',
+                    'message': message
+                }
+            )
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return
 
     # Function that receives messages from the group and sends them back to the WebSocket
     async def send_flow_reading(self, event):
@@ -75,6 +87,7 @@ class FlowReadginConsumer(AsyncJsonWebsocketConsumer):
 
 # Function to convert sync request to async
 @sync_to_async
-def create_flow_reading(flow_rate):
+def create_flow_reading(flow_rate, timestamp):
+    
+    return FlowRating.objects.create(flow_rate=flow_rate, timestamp=timestamp)
 
-    return FlowRating.objects.create(flow_rate=flow_rate)
