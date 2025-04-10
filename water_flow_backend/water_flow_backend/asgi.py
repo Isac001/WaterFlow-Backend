@@ -6,7 +6,7 @@ from channels.auth import AuthMiddlewareStack
 from django.urls import path
 
 # Project Imports
-from websocket_config.consumers import FlowReadginConsumer
+from websocket_config.consumers import FlowReadingConsumer
 
 # Defina a variável de ambiente para as configurações do Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'water_flow_backend.settings')
@@ -16,7 +16,7 @@ application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AuthMiddlewareStack(
         URLRouter([
-            path('ws/flow-reading/', FlowReadginConsumer.as_asgi()),  
+            path('ws/flow-reading/', FlowReadingConsumer.as_asgi()),  
         ])
     ),
 })

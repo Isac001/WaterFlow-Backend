@@ -1,5 +1,6 @@
 # Import Path class to work with filesystem paths in a cross-platform way
 from pathlib import Path
+from celery.schedules import crontab
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +23,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
+
+    # Django REST framework for building APIs
+    'rest_framework',
 
     # Custom project apps
     'apps.reader_leak',
+    'apps.weekly_water_consumption',
+    'apps.monthly_water_consumption',
 
     # Channels app for WebSocket support
     'channels',
+
+    # Core Codes
+    'core',
 ]
 
 # Middleware stack for handling requests/responses
@@ -119,3 +129,20 @@ CHANNEL_LAYERS = {
         }
     }
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Fortaleza'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULE = {
+    'weekly_water_consumption_task': {
+        'task': 'apps.weekly_water_consumption.utils.calculate_weekly_water_consumption',
+        'schedule': crontab(hour=0, minute=0, day_of_week='sunday'),
+    },
+}
+
+# Test configuration
+CELERY_TASK_ALWAYS_EAGER = False
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
