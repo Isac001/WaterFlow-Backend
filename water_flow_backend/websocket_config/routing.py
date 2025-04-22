@@ -6,5 +6,5 @@ from . import consumers
 
 # WebSocket Paths
 websocket_urlpatterns = [
-    re_path(r'ws/flow-reading/', consumers.FlowReadginConsumer)
+    re_path(r'ws/flow-reading/', consumers.FlowReadingConsumer)
 ]
