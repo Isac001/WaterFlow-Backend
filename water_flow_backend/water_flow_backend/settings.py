@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'apps.reader_leak',
     'apps.weekly_water_consumption',
     'apps.monthly_water_consumption',
+    'apps.bimonthly_water_consumption',
 
     # Channels app for WebSocket support
     'channels',

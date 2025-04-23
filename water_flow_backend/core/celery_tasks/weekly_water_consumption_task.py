@@ -4,7 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 @shared_task(
-        bind=True,
+    bind=True,
     max_retries=3,
     soft_timeout=300,
     priority=5,
