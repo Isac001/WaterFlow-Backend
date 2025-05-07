@@ -9,7 +9,7 @@ from .models import FlowRating
 # Serializer for FlowRating model
 class FlowReadingSerializer(serializers.ModelSerializer):
 
-    timestamp = serializers.SerializerMethodField()
+    times_tamp = serializers.SerializerMethodField()
     
     # Method to convert the timestamp to a local timezone
     class Meta:
@@ -18,8 +18,8 @@ class FlowReadingSerializer(serializers.ModelSerializer):
         model = FlowRating  
         
         # Define which fields should be serialized
-        fields = ['timestamp', 'flow_rate'] 
+        fields = ['times_tamp', 'flow_rate'] 
 
-    def get_timestamp(self, obj):
+    def get_times_tamp(self, obj):
 
-        return date_format(localtime(obj.timestamp), "d/m/Y H:i:s")
+        return date_format(localtime(obj.times_tamp), "d/m/Y H:i:s")

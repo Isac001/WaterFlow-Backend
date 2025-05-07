@@ -1,42 +1,92 @@
+from decimal import Decimal
 from django.core.management.base import BaseCommand
-from apps.reader_leak.models import FlowRating
+from apps.weekly_water_consumption.models import WeeklyWaterConsumption
 from datetime import datetime, timedelta
-from django.utils.timezone import make_aware
 import random
 
-
 class Command(BaseCommand):
-    help = 'Gera dados de teste para o modelo FlowRating com amostragem reduzida.'
 
-    def add_arguments(self, parser):
-        parser.add_argument('--days', type=int, default=30, help='Número de dias a simular (padrão: 30 dias)')
-        parser.add_argument('--interval', type=int, default=60, help='Intervalo entre medições em segundos (ex: 60 = 1 por minuto, 300 = a cada 5 min)')
-        parser.add_argument('--fixed', type=float, help='Valor fixo de flow_rate (em L/min). Se não for informado, será aleatório.')
+    help = 'Gera dados falsos de consumo de água semanal para teste de consumo mensal'
 
-    def handle(self, *args, **options):
-        start_time = datetime(year=2025, month=4, day=1, hour=0, minute=0, second=0)
-        start_time = make_aware(start_time)
+    def handle(self, *args, **kwargs):
 
-        interval = timedelta(seconds=options['interval'])
-        end_time = start_time + timedelta(days=options['days'])
+        self.stdout.write("Iniciando a geração de dados de teste...")
 
-        current_time = start_time
-        created = 0
+        self.generate_monthly_test_data()
 
-        self.stdout.write(f"\nGerando dados de teste entre {start_time} e {end_time} com intervalo de {options['interval']} segundos...\n")
+    def clear_old_data(self):
 
-        while current_time < end_time:
-            flow_rate = options['fixed'] if options['fixed'] is not None else random.uniform(0.0, 6.0)
+        """
+        Limpa dados antigos de teste
+        """
 
-            FlowRating.objects.create(
-                times_tamp=current_time,
-                flow_rate=flow_rate
-            )
+        self.stdout.write("Limpando dados antigos de teste...")
 
-            created += 1
-            if created % 500 == 0:
-                self.stdout.write(f"{created} registros criados até agora...")
+        WeeklyWaterConsumption.objects.all().delete()
 
-            current_time += interval
+    def generate_monthly_test_data(self):
 
-        self.stdout.write(f"\n{created} registros criados com sucesso para teste!\n")
+        """
+        Criando dados para teste mensal
+        """
+
+        self.stdout.write("Gerando dados de teste mensal...")
+
+        try: 
+            today = datetime.now()
+            first_day_in_month = today.replace(day=1)
+
+            if today.month == 12:
+                last_day_in_month = today.replace(year=today.year + 1, month=1, day=1) - timedelta(days=1)
+
+            else:
+
+                last_day_in_month = today.replace(month=today.month + 1, day=1) - timedelta(days=1)
+
+            self.clear_old_data()
+        
+            weeks = []
+
+            start_week = first_day_in_month
+
+            while start_week <= last_day_in_month:
+
+                date_end_week = start_week + timedelta(days=6)
+
+                if date_end_week > last_day_in_month:
+                    date_end_week = last_day_in_month
+
+                weeks.append((start_week, date_end_week))
+
+                start_week = date_end_week + timedelta(days=1)
+
+            total_consumed_in_month = Decimal('0.00')
+
+            for i, (start_week, end_week) in enumerate(weeks):
+
+                weekly_consumption = Decimal(random.randint(500, 1500)).quantize(Decimal('0.01'))
+
+                WeeklyWaterConsumption.objects.create(
+                    date_label=f"{start_week.strftime('%d/%m/%Y')} a {end_week.strftime('%d/%m/%Y')}",
+                    start_date=start_week,
+                    end_date=end_week,
+                    total_consumption=weekly_consumption
+                )
+
+                total_consumed_in_month += weekly_consumption
+
+                self.stdout.write(
+                    f"Semana {i}: {start_week.strftime('%d/%m/%Y')} a {end_week.strftime('%d/%m/%Y')}, Consumo: {weekly_consumption} L/min"
+                )
+            self.stdout.write(f"\n✅ Dados gerados com sucesso para {len(weeks)} semanas!")
+            self.stdout.write(f"📊 Total do mês: {total_consumed_in_month.quantize(Decimal('0.01'))} L/min")
+            self.stdout.write("\nPróximos passos:")
+            self.stdout.write("1. Verifique os dados no banco ou no admin do Django")
+            self.stdout.write("2. Execute o processamento mensal com:")
+            self.stdout.write("   python manage.py processar_consumo_mensal")
+
+        except Exception as e:
+
+            self.stdout.write(self.style.ERROR(f"Erro ao gerar dados de teste: {e}"))
+
+            raise

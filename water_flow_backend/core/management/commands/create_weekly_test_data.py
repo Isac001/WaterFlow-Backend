@@ -8,10 +8,6 @@ class Command(BaseCommand):
 
     help = 'Cria dados de teste para o modelo FlowRating'
 
-    def add_arguments(self, parser):
-        parser.add_argument('--fixed', type=float, help='Valor fixo de flow_rate (em L/min). Se não for informado, será aleatório.')
-        parser.add_argument('--days', type=int, default=7, help='Intervalo entre medições em segundos (ex: 3600 = 1 por hora)')
-
     def handle(self, *args, **options):
 
         days = options['days']

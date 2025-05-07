@@ -1,12 +1,18 @@
 # Import Path class to work with filesystem paths in a cross-platform way
 from pathlib import Path
 from celery.schedules import crontab
+import os
+from dotenv import load_dotenv
+
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Import enviroment variables
+load_dotenv()
+
 # Django secret key (do not share in production)
-SECRET_KEY = 'django-insecure-ltshk8lp_7f*my$gy-lb5+hcr1o=%!!#phi3x9$0gq5^of4r+!'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # Debug mode enabled (set to False in production)
 DEBUG = True
@@ -79,11 +85,11 @@ ASGI_APPLICATION = 'water_flow_backend.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'waterflow', 
-        'USER': 'waterflow',  
-        'PASSWORD': 'root', 
-        'HOST': 'localhost', 
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'), 
+        'USER': os.getenv('DB_USER'),  
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'), 
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -126,13 +132,13 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)]
+            "hosts": [('redis', 6379)]
         }
     }
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Fortaleza'

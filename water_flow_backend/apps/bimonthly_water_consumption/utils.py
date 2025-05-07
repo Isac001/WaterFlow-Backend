@@ -5,6 +5,7 @@ from apps.reader_leak.models import FlowRating
 from apps.bimonthly_water_consumption.models import BimonthlyWaterConsumption
 import logging
 import locale
+from apps.monthly_water_consumption.models import MonthlyWaterConsumption 
 
 
 logger = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ def bimonthly_water_consumption():
         current_month = today.month
         current_year = today.year
 
-        first_month = current_month - 1 if current_month % 2 == 0 else current_month
+        first_month = ((current_month - 1) // 2) * 2 + 1
         first_day = datetime(current_year, first_month, 1).date()
 
         if first_month == 11:
@@ -32,23 +33,16 @@ def bimonthly_water_consumption():
         
             last_day = (datetime(current_year, first_month + 2, 1).date() - timedelta(days=1))
 
-        records = FlowRating.objects.filter(
-            times_tamp__date__range=[first_day, last_day]
-        ).order_by('times_tamp')
+        records = MonthlyWaterConsumption.objects.filter(
+            start_date__gte=first_day,
+            end_date__lte=last_day
+        ).order_by('start_date')
 
         if not records.exists():
             logger.warning(f"Nenhum dado encontrado para o bimestre {first_day.strftime('%B')} de {first_day.year}.")
             return None
         
-        total_volume = Decimal('0.00')
-        prev_record = None
-
-        for record in records:
-
-            if prev_record:
-                total_volume += Decimal(prev_record.flow_rate)
-
-            prev_record = record
+        total_volume = sum(Decimal(record.total_consumption) for record in records)
 
         if BimonthlyWaterConsumption.objects.filter(
             start_date=first_day,
@@ -57,14 +51,17 @@ def bimonthly_water_consumption():
             logger.warning(f"Registro para o bimestre {first_day.strftime('%B')} de {first_day.year} já existe.")
             return None
         
+        month_names = [
+            first_day.strftime('%B').capitalize(),
+            last_day.strftime('%B').capitalize()
+        ]
+        
         return BimonthlyWaterConsumption.objects.create(
-            date_label=f"Consumo bimestral de {first_day.strftime('%B')} a {last_day.strftime('%B')} {first_day.year}",
+            date_label=f"Consumo bimestral de {month_names[0]} a {month_names[1]} de {current_year}",
             start_date=first_day,
             end_date=last_day,
             total_consumption=total_volume.quantize(Decimal('0.01'))
         )
-
-
 
     except Exception as e:
 

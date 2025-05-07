@@ -13,25 +13,24 @@ app = Celery('water_flow_backend')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Descobrindo tasks automaticamente
-app.autodiscover_tasks()
+app.autodiscover_tasks(['core.celery_tasks'])
 
 # Config extra (opcional)
 app.conf.worker_pool_restarts = True
 app.conf.worker_concurrency = 4  # ajuste conforme sua infra
 
-# Celery Beat: rodar cálculo semanal todo domingo às 23:59
 CELERY_BEAT_SCHEDULE = {
     'weekly_water_consumption_task': {
-        'task': 'apps.weekly_water_consumption.tasks.weekly_water_consumption_task',
-        'schedule': crontab(hour=0, minute=0, day_of_week='sunday'),
+        'task': 'core.weekly_water_consumption.tasks.weekly_water_consumption_task',
+        'schedule': crontab(hour=0, minute=0, day_of_week='monday'),
     },
     'monthly_water_consumption_task': {
-        'task': 'apps.monthly_water_consumption.tasks.monthly_water_consumption_task',
-        'schedule': crontab(hour=1, minute=0, day_of_month='1'),  # Executa no 1º dia de cada mês às 01:00
+        'task': 'core.monthly_water_consumption.tasks.monthly_water_consumption_task',
+        'schedule': crontab(hour=1, minute=0, day_of_month='1'), 
     },
     'bimonthly_water_consumption_task': {
-        'task': 'apps.bimonthly_water_consumption.tasks.bimonthly_water_consumption_task',
-        'schedule': crontab(hour=1, minute=0, day_of_month='1'),
+        'task': 'core.bimonthly_water_consumption.tasks.bimonthly_water_consumption_task',
+        'schedule': crontab(hour=1, minute=0, day_of_month='1', month_of_year='1,3,5,7,9,11'),
     },
 }
 

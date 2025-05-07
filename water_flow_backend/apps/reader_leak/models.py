@@ -14,7 +14,8 @@ class FlowRating(models.Model):
 
     # Returns a readable string representation of the record
     def __str__(self):
-        local_time = localtime(self.timestamp)
+        
+        local_time = localtime(self.times_tamp)
         return date_format(local_time, "d/m/Y H:i:s") + f" - {self.flow_rate} L/min"
     
     # Meta class to define additional properties for the model
