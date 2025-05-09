@@ -48,6 +48,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - TZ=America/Fortaleza
+      - POSTGRES_INITDB_ARGS=--timezone=America/Fortaleza
     networks:
       - network
 
@@ -107,7 +109,7 @@ services:
     image: redis:latest
     container_name: redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     networks:
       - network
 

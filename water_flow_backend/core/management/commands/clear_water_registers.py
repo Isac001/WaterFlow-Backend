@@ -2,7 +2,7 @@ from itertools import count
 from django.core.management import BaseCommand
 from apps.bimonthly_water_consumption.models import BimonthlyWaterConsumption
 from apps.monthly_water_consumption.models import MonthlyWaterConsumption
-from apps.reader_leak.models import FlowRating
+from apps.flow_rating.models import FlowRating
 from apps.weekly_water_consumption.models import WeeklyWaterConsumption
 
 

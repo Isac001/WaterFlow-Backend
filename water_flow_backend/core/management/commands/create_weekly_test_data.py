@@ -1,8 +1,11 @@
 from django.core.management.base import BaseCommand
-from apps.reader_leak.models import FlowRating
+from apps.flow_rating.models import FlowRating
 from datetime import datetime, timedelta
 import random
+from decimal import Decimal
 from django.utils.timezone import make_aware
+from apps.dialy_water_consumption.models import DialyWaterConsumption
+from core.celery_tasks import weekly_water_consumption_task
 
 class Command(BaseCommand):
 
@@ -10,25 +13,47 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        days = options['days']
-        fixed_flow_rate = options['fixed']
-        created = 0
+        try:
 
-        self.stdout.write(f"\nGerando dados de teste para {days} dias...\n")
+            self.clear_old_data()
 
-        for day in range(days):
+            end_day = datetime.now().date()
 
-            base_date = datetime.now() - timedelta(days=day)
+            start_day = end_day - timedelta(days=6)
+            
+            self.stdout.write(f"\nGerando dados de teste da semana de {end_day} a {start_day} dias...\n")
 
-            for hour in range(24):
+            for days_ago in range(7):
 
-                times_tamp = make_aware(base_date.replace(hour=hour, minute=0, second=0, microsecond=0))
-                flow_rate = fixed_flow_rate if fixed_flow_rate is not None else random.uniform(0.5, 5.0)
+                current_date = end_day - timedelta(days_ago)
 
-                FlowRating.objects.create(
-                    times_tamp=times_tamp,  
-                    flow_rate=flow_rate
+                total_consumption = Decimal(random.uniform(0, 40000)).quantize(Decimal('0.00'))  
+
+                DialyWaterConsumption.objects.create(
+                    date_label=f"Total de litros consumidos do dia {current_date.strftime('%d de %B de %Y')}",
+                    total_consumption=total_consumption
                 )
-                created += 1
 
-        self.stdout.write(self.style.SUCCESS(f"\n✅ {created} registros criados com sucesso para teste semanal!\n"))
+            self.stdout.write(
+                    f"Dia {current_date.strftime('%d/%m/%Y')}: "
+                    f"{total_consumption} litros"
+                )
+
+            self.stdout.write(self.style.SUCCESS("\n✅ Dados de teste criados com sucesso! Iniciando task de consumo semanal..\n"))
+
+            result = weekly_water_consumption_task.delay()
+
+            self.stdout.write(self.style.SUCCESS(f"\n✅ Task de consumo semanal iniciada com sucesso! Tarefa: {result.id}\n"))
+
+        except Exception as e:
+
+            self.stdout.write(self.style.ERROR(f"\n❌ Erro ao criar dados de teste: {e}\n"))
+
+
+    def clear_old_data(self):
+
+        """
+        Limpa dados antigos de teste
+        """
+        self.stdout.write("Limpando dados antigos de teste...")
+        DialyWaterConsumption.objects.all().delete()

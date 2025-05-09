@@ -1,0 +1,15 @@
+[
+    {
+        "model": "user.User",
+        "pk": 1,
+        "fields": {
+            "user_name": "usuario",
+            "user_email": "usuario@email.com",
+            "user_cpf": "123.456.789-10",
+            "password": "pbkdf2_sha256$870000$CTHRJyUAJxieraVhoafmD3$Keqdi8sgpEm7lnY+5uvYK9lSaMxUiYNw6vqibqr0/Ig=",
+            "is_active": true,
+            "is_staff": false,
+            "is_trusty": true
+        }
+    }
+]
