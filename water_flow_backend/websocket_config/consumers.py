@@ -46,25 +46,25 @@ class FlowReadingConsumer(AsyncJsonWebsocketConsumer):
         # Log the received data
         print(f"Received data: {flow_data_json}")
 
-        # Extract the flow rate and timestamp from the received data
+        # Extract the flow rate and times_tamp from the received data
         flow_rate = flow_data_json.get('flow_rate')
-        timestamp_str = flow_data_json.get('timestamp')
+        times_tamp_str = flow_data_json.get('times_tamp')
 
         # Check if the required fields are present
-        if flow_rate is None or timestamp_str is None:
+        if flow_rate is None or times_tamp_str is None:
             print("Error: 'flow_rate' not found in data")
             return
         
         try:
 
-            dt = datetime.strptime(timestamp_str, "%d/%m/%Y %H:%M:%S")
+            dt = datetime.strptime(times_tamp_str, "%d/%m/%Y %H:%M:%S")
 
             aware_dt = make_aware(dt)
 
             # Create a new flow reading record in the database
             flow_reading = await create_flow_reading(
                 flow_rate=flow_rate,
-                timestamp=aware_dt
+                times_tamp=aware_dt
             )
 
             # Serialize the flow reading record
@@ -102,6 +102,6 @@ class FlowReadingConsumer(AsyncJsonWebsocketConsumer):
 
 # Function to create a flow reading record in the database (sync-to-async wrapper)
 @sync_to_async
-def create_flow_reading(flow_rate, timestamp):
+def create_flow_reading(flow_rate, times_tamp):
     # Create and return a new FlowRating record
-    return FlowRating.objects.create(flow_rate=flow_rate, timestamp=timestamp)
+    return FlowRating.objects.create(flow_rate=flow_rate, times_tamp=times_tamp)
