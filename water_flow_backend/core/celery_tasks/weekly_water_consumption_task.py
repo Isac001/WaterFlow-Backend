@@ -1,6 +1,7 @@
 from celery import shared_task
 from apps.weekly_water_consumption.utils import calculate_weekly_water_consumption
 import logging
+from builtins import Exception
 
 logger = logging.getLogger(__name__)
 @shared_task(

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from decimal import Decimal
 from django.db.models import Sum
-from apps.reader_leak.models import FlowRating
+from apps.flow_rating.models import FlowRating
 from apps.bimonthly_water_consumption.models import BimonthlyWaterConsumption
 import logging
 import locale

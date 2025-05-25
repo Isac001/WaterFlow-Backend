@@ -4,10 +4,11 @@ from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from asgiref.sync import sync_to_async
 from django.utils.timezone import make_aware
 from datetime import datetime
+from builtins import Exception
 
 # Project Imports
-from apps.reader_leak.models import FlowRating
-from apps.reader_leak.serializers import FlowReadingSerializer
+from apps.flow_rating.models import FlowRating
+from apps.flow_rating.serializers import FlowReadingSerializer
 
 # WebSocket consumer class for handling flow readings
 class FlowReadingConsumer(AsyncJsonWebsocketConsumer):
@@ -16,7 +17,7 @@ class FlowReadingConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
 
         # Define the WebSocket group name
-        self.reader_name = 'reader_leak'
+        self.reader_name = 'flow_reting'
         self.reader_group_name = f"channel_{self.reader_name}"
 
         # Add the WebSocket connection to the group

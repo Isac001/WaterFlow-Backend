@@ -3,6 +3,7 @@ from pathlib import Path
 from celery.schedules import crontab
 import os
 from dotenv import load_dotenv
+import datetime
 
 
 # Base directory of the project
@@ -33,18 +34,42 @@ INSTALLED_APPS = [
 
     # Django REST framework for building APIs
     'rest_framework',
+    'rest_framework_simplejwt',
 
     # Custom project apps
-    'apps.reader_leak',
+    'apps.flow_rating',
     'apps.weekly_water_consumption',
     'apps.monthly_water_consumption',
     'apps.bimonthly_water_consumption',
+    'apps.dialy_water_consumption',
+    'apps.user',
 
     # Channels app for WebSocket support
     'channels',
 
     # Core Codes
     'core',
+]
+
+AUTH_USER_MODEL = 'user.User'
+
+# JWT token configuration settings
+SIMPLE_JWT = {
+    # Access token lifetime (600 minutes = 10 hours)
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=600),
+
+    # Refresh token lifetime (24 hours)
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=24),
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 # Middleware stack for handling requests/responses
@@ -143,12 +168,6 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Fortaleza'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_BEAT_SCHEDULE = {
-    'weekly_water_consumption_task': {
-        'task': 'apps.weekly_water_consumption.utils.calculate_weekly_water_consumption',
-        'schedule': crontab(hour=0, minute=0, day_of_week='sunday'),
-    },
-}
 
 # Test configuration
 CELERY_TASK_ALWAYS_EAGER = False

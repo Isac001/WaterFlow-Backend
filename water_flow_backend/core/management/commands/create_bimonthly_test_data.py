@@ -4,8 +4,7 @@ from apps.bimonthly_water_consumption.models import BimonthlyWaterConsumption
 from apps.monthly_water_consumption.models import MonthlyWaterConsumption
 from datetime import datetime, timedelta
 import random
-import calendar
-
+from builtins import Exception
 class Command(BaseCommand):
     help = 'Gera dados falsos de consumo mensal para teste de consumo bimestral'
 

@@ -5,6 +5,7 @@ import locale
 
 from apps.monthly_water_consumption.models import MonthlyWaterConsumption
 from apps.weekly_water_consumption.models import WeeklyWaterConsumption
+from builtins import Exception
 
 logger = logging.getLogger(__name__)
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
