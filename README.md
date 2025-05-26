@@ -85,7 +85,7 @@ Then:
 
 ```bash
 CREATE DATABASE waterflow;
-CREATE USER conviva WITH PASSWORD 'root';
+CREATE USER waterflow WITH PASSWORD 'root';
 GRANT ALL PRIVILEGES ON DATABASE waterflow TO waterflow;
 ```
 
