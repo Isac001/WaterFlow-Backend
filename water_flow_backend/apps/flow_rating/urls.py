@@ -1,7 +1,7 @@
-from django.urls import path
-from . import views  
+# from django.urls import path
+# from .views import *  
 
-urlpatterns = [
-    path('flow_reading/', views.FlowReadingView.as_view(), name='flow_reading'),
-]
+# urlpatterns = [
+#     path('flow_reading/', FlowReadingView.as_view(), name='flow_reading'),
+# ]
 

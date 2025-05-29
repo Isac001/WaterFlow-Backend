@@ -4,7 +4,9 @@ from celery.schedules import crontab
 import os
 from dotenv import load_dotenv
 import datetime
+import locale
 
+locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_beat',
+    'django_celery_results',
 
     # Django REST framework for building APIs
     'rest_framework',

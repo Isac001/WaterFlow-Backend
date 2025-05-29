@@ -1,5 +1,5 @@
 from celery import shared_task
-from apps.weekly_water_consumption.utils import calculate_weekly_water_consumption
+from apps.daily_water_consumption.utils import calculate_daily_water_consumption
 import logging
 from builtins import Exception
 from django.conf import settings
@@ -11,12 +11,12 @@ from datetime import datetime
     soft_timeout=300,
     priority=5,
 )
-def weekly_water_consumption_task(self):
+def daily_water_consumption_task(self):
     """
-    Celery task to calculate and store weekly water consumption.
+    Celery task to calculate and store daily water consumption.
     """
     
-    audit_log_path = f"{settings.BASE_DIR}/core/logs_audit/weekly_logs.txt"
+    audit_log_path = f"{settings.BASE_DIR}/core/logs_audit/daily_logs.txt"
 
     def write_log(message, is_start=False, is_end=True):
         time_stamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
@@ -36,37 +36,35 @@ def weekly_water_consumption_task(self):
             audit_log.write(log_entry)
 
     try:
-        write_log("Iniciando a Task de consumo semanal", is_start=True)
+        write_log("Iniciando a Task de consumo de água diario", is_start=True)
 
-        task_in_working = calculate_weekly_water_consumption()
+        task_in_working = calculate_daily_water_consumption()
 
         if not task_in_working:
-            write_log("Semana já processada ou sem dados válidos.")
+            write_log("Dia já processada ou sem dados válidos.")
             write_log(is_end=True)
             
             return {
                 "status": "warning",
-                "message": "Semana já processada ou sem dados válidos."
+                "message": "Dia já processada ou sem dados válidos."
             }
 
         write_log(
             f"TASK CONCLUÍDA!"
-            f"           Semana da leitura: {task_in_working.date_label}"
+            f"           Dia da leitura: {task_in_working.date_label}"
             f"           Litros de água consumidos: {task_in_working.total_consumption}"
-            f"           Data do início da leitura: {task_in_working.start_date}"
-            f"           Data do fim da leitura: {task_in_working.end_date}"
         )
         
         write_log("", is_end=True)
 
         return {
             "status": "success",
-            "week": task_in_working.date_label,
+            "date_label": task_in_working.date_label,
             "total_consumption": float(task_in_working.total_consumption),
         }
 
     except Exception as e:
-        error_message = f"Erro ao calcular o consumo semanal de água: {e}"
+        error_message = f"Erro ao calcular o consumo diario de água: {e}"
         write_log(error_message)
         write_log("", is_end=True)
         raise self.retry(exc=e, countdown=60, max_retries=3)

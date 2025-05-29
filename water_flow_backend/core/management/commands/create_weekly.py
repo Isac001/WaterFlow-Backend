@@ -1,30 +1,22 @@
 from django.core.management.base import BaseCommand
-from apps.flow_rating.models import FlowRating
 from datetime import datetime, timedelta
 import random
 from decimal import Decimal
-from django.utils.timezone import make_aware
 from apps.daily_water_consumption.models import DailyWaterConsumption
 from core.celery_tasks import weekly_water_consumption_task
 
 class Command(BaseCommand):
-
     help = 'Cria dados de teste para o modelo FlowRating'
 
     def handle(self, *args, **options):
-
         try:
-
             end_day = datetime.now().date()
-
             start_day = end_day - timedelta(days=6)
             
             self.stdout.write(f"\nGerando dados de teste da semana de {end_day} a {start_day} dias...\n")
 
             for days_ago in range(7):
-
-                current_date = end_day - timedelta(days_ago)
-
+                current_date = end_day - timedelta(days=days_ago)
                 total_consumption = Decimal(random.uniform(0, 40000)).quantize(Decimal('0.00'))  
 
                 DailyWaterConsumption.objects.create(
@@ -32,17 +24,17 @@ class Command(BaseCommand):
                     total_consumption=total_consumption
                 )
 
-            self.stdout.write(
-                    f"Dia {current_date.strftime('%d/%m/%Y')}: "
-                    f"{total_consumption} litros"
+                self.stdout.write(
+                    f"Dia {current_date.strftime('%d/%m/%Y')}: {total_consumption} litros"
                 )
 
             self.stdout.write(self.style.SUCCESS("\n✅ Dados de teste criados com sucesso! Iniciando task de consumo semanal..\n"))
 
-            result = weekly_water_consumption_task.delay()
+            # Correção aqui
+            async_result = weekly_water_consumption_task.apply()
+            result_data = async_result.get(timeout=30)
 
-            self.stdout.write(self.style.SUCCESS(f"\n✅ Task de consumo semanal iniciada com sucesso! Tarefa: {result.id}\n"))
+            self.stdout.write(self.style.SUCCESS(f"\n✅ Task de consumo semanal iniciada com sucesso! Tarefa: {async_result.id}\n"))
 
         except Exception as e:
-
             self.stdout.write(self.style.ERROR(f"\n❌ Erro ao criar dados de teste: {e}\n"))

@@ -7,7 +7,7 @@ from apps.daily_water_consumption.models import DailyWaterConsumption
 
 logger = logging.getLogger(__name__)
 
-def daily_water_consumption():
+def calculate_daily_water_consumption():
     try:
         today = datetime.now().date()
         formatted_date = today.strftime('%d/%m/%Y')

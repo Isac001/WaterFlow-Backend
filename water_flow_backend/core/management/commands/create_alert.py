@@ -3,7 +3,6 @@ from django.utils.timezone import now
 from datetime import timedelta
 import random
 
-from apps.alert_water_consumption.utils import WaterConsumptionAlertGenerator
 from apps.daily_water_consumption.models import DailyWaterConsumption
 from core.celery_tasks.alert_water_consumption_task import alert_water_consumption_task
 
@@ -12,6 +11,8 @@ class Command(BaseCommand):
     help = "Sempre gera um alerta de consumo de água para testes"
 
     def handle(self, *args, **options):
+
+        self.stdout.write("Verificando se o Celery está configurado corretamente...")
         self.stdout.write("Criando dados de consumo baixo dos últimos 30 dias...")
         self.create_past_data()
 
@@ -21,16 +22,24 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Consumo de hoje: {consumo_hoje.total_consumption}L"))
 
         self.stdout.write("Executando tarefa Celery de alerta...")
-        result = alert_water_consumption_task.apply().get()
-
-        if result.get("alert_created"):
-            self.stdout.write(self.style.SUCCESS(f"✅ Alerta criado com sucesso! ID: {result['alert_id']}"))
-            self.stdout.write(f"🔔 Tipo: {result['alert_type']}")
-            self.stdout.write(f"📈 Excesso: {float(result['exceeded_amount']):.2f}L")
-            self.stdout.write(f"📊 Porcentagem: {float(result['percentage']):.2f}%")
-        else:
-            self.stdout.write(self.style.WARNING(result.get("message", "Nenhum alerta gerado")))
-
+        try:
+            result = alert_water_consumption_task.apply().get(timeout=30)
+            
+            if result.get("alert_created"):
+                self.stdout.write(self.style.SUCCESS(f"✅ Alerta criado com sucesso! ID: {result['alert_id']}"))
+                self.stdout.write(f"🔔 Tipo: {result['alert_type']}")
+                self.stdout.write(f"📈 Excesso: {float(result['exceeded_amount']):.2f}L")
+                self.stdout.write(f"📊 Porcentagem: {float(result['percentage']):.2f}%")
+            else:
+                self.stdout.write(self.style.WARNING(result.get("message", "Nenhum alerta gerado")))
+                
+            # Verifique o arquivo de log de auditoria
+            audit_log = result.get("audit_log", "N/A")
+            self.stdout.write(f"📝 Log de auditoria em: {audit_log}")
+            
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"Erro ao executar tarefa: {str(e)}"))
+            raise
     def create_past_data(self):
         base = 1000
         today = now().date()

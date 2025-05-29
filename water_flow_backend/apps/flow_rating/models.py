@@ -22,7 +22,7 @@ class FlowRating(models.Model):
     # Returns a string representation of the FlowRating object
     def __str__(self):
         
-        local_time = localtime(self.times_tamp)  # Convert to local timezone
+        local_time = localtime(self.times_tamp)  
         return local_time.strftime("%d/%m/%Y %H:%M:%S") + f" - {self.flow_rate} L/min"
 
     class Meta:

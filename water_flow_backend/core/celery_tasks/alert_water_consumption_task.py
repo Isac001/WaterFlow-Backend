@@ -24,9 +24,9 @@ def alert_water_consumption_task(self):
         with open(audit_log_path, "a", encoding="utf-8") as audit_file:
             if is_start:
                 audit_file.write("{\n")
-                log_entry = f"      TASK INICIADA: {message} [{time_stamp}]\n"
+                log_entry = f"      TASK INICIADA: {message} | [{time_stamp}]\n"
             elif is_end:
-                log_entry = f"      TASK FINALIZADA! [{time_stamp}]\n"
+                log_entry = f"      TASK FINALIZADA!  | [{time_stamp}]\n"
                 log_entry += "}\n\n"  
             else:
                 log_entry = f"        {message}\n"
@@ -47,7 +47,6 @@ def alert_water_consumption_task(self):
                 "status": "success",
                 "alert_created": False,
                 "message": "No excessive consumption detected",
-                "audit_log": audit_log_path
             }
         
         alert_details = (
