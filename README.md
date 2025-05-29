@@ -1,7 +1,7 @@
 
 # **WaterFlow - Backend**
 
-# How to install docker on your machine (optional)
+# How to install docker on your machine 
 
 ### Install git:
 
@@ -89,10 +89,19 @@ CREATE USER waterflow WITH PASSWORD 'root';
 GRANT ALL PRIVILEGES ON DATABASE waterflow TO waterflow;
 ```
 
-After configuring the project, use the following command to exit the terminal:
+After configuring this part, use the following command to exit the terminal:
 
 ```bash
 \q
+```
+
+To finalizate the database configuration, execute:
+
+```bash
+sudo -u postgres psql -d waterflow
+
+# IN DATABASE RUNNIGN:
+GRANT ALL PRIVILEGES ON SCHEMA public TO waterflow;
 ```
 
 ### Now enter the directory where the project root is located by using:
@@ -107,24 +116,23 @@ Install the requirements of the project using the following command:
 pip install -r requirements.txt
 ```
 
-
-
-### Next, you should run the commands to create the tables in the database using the migration and loadfixture commands.
+### Now, this part is to test de API, firstone build the containers
 
 ```bash
-python3 manage.py loadfixtures
+docker compose up
+docker exec -it water_flow_backend sh
 ```
 
-Finally, some checks should be performed before starting the system execution.
+Afert, use someone the commands to create mock data and run tasks:
 
-In the settings.py file of the project, you should provide the IP used by the application to connect to the server. This value should be inserted in the ALLOWED_HOSTS and CORS_ORIGIN_WHITELIST properties.
-
-In the .env file, you should verify if the system's access data to the DBMS corresponds to the ones configured in the previous step.
-
-After these steps, the solution is ready for execution, as shown in the following command.
-
+Commands to generate mock data and running tasks:
 ```bash
-python3 manage.py runserver 0:8000
+python3 manage.py create_alert
+python3 manage.py create_daily
+python3 manage.py create_weekly
+python3 manage.py create_monthly
+python3 manage.py create_bimonthly
+python3 manage.py loadfixtures
 ```
 
 Once the installation process is completed, you can access the backend of the solution from a web browser in two ways:
