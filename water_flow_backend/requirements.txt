@@ -47,3 +47,4 @@ djangorestframework_simplejwt==5.5.0
 psycopg==3.2.5
 PyJWT==2.9.0
 pytz==2023.3.post1
+psycopg2-binary==2.9.10

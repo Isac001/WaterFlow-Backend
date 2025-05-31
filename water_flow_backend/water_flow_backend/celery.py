@@ -17,7 +17,8 @@ app.autodiscover_tasks([
     'core.celery_tasks.bimonthly_water_consumption_task',
     'core.celery_tasks.dialy_water_consumption_task',
     'core.celery_tasks.monthly_water_consumption_task',
-    'core.celery_tasks.weekly_water_consumption_task'
+    'core.celery_tasks.weekly_water_consumption_task',
+    'core.celery_tasks.alert_water_consumption_task',
 ])
 
 # Worker configuration
@@ -52,5 +53,12 @@ app.conf.beat_schedule = {
         'task': 'core.celery_tasks.bimonthly_water_consumption_task',
         'schedule': crontab(hour=1, minute=0, day_of_month='1', month_of_year='1,3,5,7,9,11'),  # Bimestral ímpar
         'options': {'priority': 2}
+    },
+
+    # Tarefa de alerta de consumo de água
+    'alert_water_consumption': {
+        'task': 'core.celery_tasks.alert_water_consumption_task',
+        'schedule': crontab(hour=0, minute=0),  # 00:00 diariamente
+        'options': {'priority': 5}
     }
 }

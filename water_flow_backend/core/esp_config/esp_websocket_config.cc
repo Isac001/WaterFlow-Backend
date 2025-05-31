@@ -5,7 +5,7 @@
 
 // using namespace websockets;
 
-// const char* ssid = "brisanet-2090364";
+// const char* ssid = "brisa-2090364";
 // const char* password = "xzxcx5dt";
 // const char* websockets_server_host = "192.168.0.105";
 // const int websockets_server_port = 8000;
@@ -22,10 +22,51 @@
 //   pulse_counter++;
 // }
 
+// // Adicionando a declaração da função antes do setup()
+// void waitForNTP() {
+//   Serial.print("⌛ Aguardando NTP");
+//   time_t now = time(nullptr);
+//   int attempts = 0;
+//   while (now < 8 * 3600 * 2) {
+//     delay(500);
+//     Serial.print(".");
+//     now = time(nullptr);
+//     attempts++;
+//     if (attempts > 30) {
+//       Serial.println("\n❌ Erro: NTP não respondeu. Reiniciando...");
+//       ESP.restart();
+//     }
+//   }
+//   Serial.println("\n✅ Horário sincronizado com sucesso!");
+//   Serial.print("🕒 Horário atual: ");
+//   Serial.println(ctime(&now));
+// }
+
 // void setup() {
 //   Serial.begin(115200);
 //   delay(1000);
 //   Serial.println("🚀 Inicializando...");
+
+//   // Lista redes WiFi disponíveis
+//   Serial.println("🔍 Scan de redes WiFi disponíveis:");
+//   int n = WiFi.scanNetworks();
+//   if (n == 0) {
+//     Serial.println("Nenhuma rede encontrada");
+//   } else {
+//     Serial.print(n);
+//     Serial.println(" redes encontradas:");
+//     for (int i = 0; i < n; ++i) {
+//       Serial.print(i + 1);
+//       Serial.print(": ");
+//       Serial.print(WiFi.SSID(i));
+//       Serial.print(" (");
+//       Serial.print(WiFi.RSSI(i));
+//       Serial.print(" dBm)");
+//       Serial.println((WiFi.encryptionType(i) == ENC_TYPE_NONE) ? " " : "*");
+//       delay(10);
+//     }
+//   }
+//   Serial.println("========================");
 
 //   pinMode(FlowSensor_INPUT, INPUT_PULLUP);
 //   attachInterrupt(digitalPinToInterrupt(FlowSensor_INPUT), interrupt_handler, RISING);
@@ -77,25 +118,6 @@
 //   Serial.println("⏱️ Configurando sincronização NTP...");
 //   configTime(-3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
 //   waitForNTP();
-// }
-
-// void waitForNTP() {
-//   Serial.print("⌛ Aguardando NTP");
-//   time_t now = time(nullptr);
-//   int attempts = 0;
-//   while (now < 8 * 3600 * 2) {
-//     delay(500);
-//     Serial.print(".");
-//     now = time(nullptr);
-//     attempts++;
-//     if (attempts > 30) {
-//       Serial.println("\n❌ Erro: NTP não respondeu. Reiniciando...");
-//       ESP.restart();
-//     }
-//   }
-//   Serial.println("\n✅ Horário sincronizado com sucesso!");
-//   Serial.print("🕒 Horário atual: ");
-//   Serial.println(ctime(&now));
 // }
 
 // void loop() {

@@ -5,7 +5,7 @@ from apps.weekly_water_consumption.models import WeeklyWaterConsumption
 import logging
 import locale
 from builtins import Exception
-from apps.dialy_water_consumption.models import DialyWaterConsumption
+from apps.daily_water_consumption.models import DailyWaterConsumption
 
 logger = logging.getLogger(__name__)
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8') 
@@ -17,7 +17,7 @@ def calculate_weekly_water_consumption():
         start_day = end_day - timedelta(days=6)
         records = []
 
-        for record in DialyWaterConsumption.objects.all():
+        for record in DailyWaterConsumption.objects.all():
             try:
 
                 date_str = record.date_label.split("dia")[-1].strip()

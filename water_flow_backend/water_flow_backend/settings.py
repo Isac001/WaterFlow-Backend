@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'apps.weekly_water_consumption',
     'apps.monthly_water_consumption',
     'apps.bimonthly_water_consumption',
-    'apps.dialy_water_consumption',
+    'apps.daily_water_consumption',
     'apps.user',
+    'apps.alert_water_consumption',
 
     # Channels app for WebSocket support
     'channels',
