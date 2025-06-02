@@ -11,12 +11,11 @@ from .models import AlertWaterConsumption
 
 logger = logging.getLogger(__name__)
 
-# Main classe to generate water consumption alerts
-class WaterConsumptionAlertGenerator:
 
 
-    # Method to parse date from a label
-    def parse_date_label(date_label):
+
+# Method to parse date from a label
+def parse_date_label(date_label):
 
         # Try to extract the date from the label
         try:
@@ -61,8 +60,9 @@ class WaterConsumptionAlertGenerator:
             logger.error(f"Error parsing date_label '{date_label}': {e}")
             return None
         
-    # Method to calculate the average water consumption over a specified number of days
-    def calculate_average_consumption(days=30):
+# Method to calculate the average water consumption over a specified number of days
+def calculate_average_consumption(days=7):
+        
         """
         Calculate the average water consumption over the last `days` days.
         Args:
@@ -75,7 +75,7 @@ class WaterConsumptionAlertGenerator:
 
         # 1. Parse all dates and filter valid entries
         for consumption in all_consumptions:
-            date = WaterConsumptionAlertGenerator.parse_date_label(consumption.date_label)
+            date = parse_date_label(consumption.date_label)
             if date is not None:
                 valid_consumptions.append({
                     'date': date,
@@ -103,8 +103,8 @@ class WaterConsumptionAlertGenerator:
         total = sum(item['total_consumption'] for item in recent_consumptions)
         return Decimal(total) / Decimal(len(recent_consumptions))
         
-    
-    def check_for_alerts():
+ # Check function   
+def check_for_alerts():
 
         """
         Check if the latest water consumption exceeds the average consumption.
@@ -114,7 +114,7 @@ class WaterConsumptionAlertGenerator:
         """
 
         # Calculate the average water consumption
-        average = WaterConsumptionAlertGenerator.calculate_average_consumption()
+        average = calculate_average_consumption()
 
         # If no valid average is found, log a warning and return None
         if average is None:
@@ -130,7 +130,7 @@ class WaterConsumptionAlertGenerator:
         for consumption in all_consumptions:
 
             # Parse the date from the consumption's date label
-            current_date = WaterConsumptionAlertGenerator.parse_date_label(consumption.date_label)
+            current_date = parse_date_label(consumption.date_label)
 
             # If the date is valid and is the latest found so far, update the latest variables
             if current_date and (latest_date is None or current_date > latest_date):

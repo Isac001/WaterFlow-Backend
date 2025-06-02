@@ -1,0 +1,20 @@
+{
+      TASK INICIADA: Iniciando task de consumo semanal... | [02-06-2025 15:15:25]
+      TASK CONCLUÍDA - ID: 1
+           Período da leitura: Consumo de água da semana de 27/05/2025 a 02/06/2025
+           Litros de água consumidos: 130908.60
+           Data do início da leitura: 27-05-2025 15:15:25
+           Data do fim da leitura: 02-06-2025 15:15:25
+      TASK FINALIZADA! | [02-06-2025 15:15:25]
+}
+
+{
+      TASK INICIADA: Iniciando task de consumo semanal... | [02-06-2025 15:28:53]
+      TASK CONCLUÍDA - ID: 1
+           Período da leitura: Consumo de água da semana de 27/05/2025 a 02/06/2025
+           Litros de água consumidos: 182444.43
+           Data do início da leitura: 27-05-2025 15:28:53
+           Data do fim da leitura: 02-06-2025 15:28:53
+      TASK FINALIZADA! | [02-06-2025 15:28:53]
+}
+

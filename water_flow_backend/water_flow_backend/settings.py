@@ -4,7 +4,10 @@ from celery.schedules import crontab
 import os
 from dotenv import load_dotenv
 import datetime
+import locale
 
+# Set the timezone of the project
+locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 # Base directory of the project
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_beat',
+    'django_celery_results',
 
     # Django REST framework for building APIs
     'rest_framework',
@@ -64,9 +68,14 @@ SIMPLE_JWT = {
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+    # Configuração de autenticação
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ],
+    
+    "DEFAULT_PAGINATION_CLASS": "core.utils.pagination.StandardResultsSetPagination", 
+    
 }
 
 AUTHENTICATION_BACKENDS = [
@@ -163,6 +172,7 @@ CHANNEL_LAYERS = {
     }
 }
 
+# Celery settings
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
