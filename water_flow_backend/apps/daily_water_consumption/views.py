@@ -21,7 +21,7 @@ class DailyWaterConsumptionView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     
     # Define the queryset to retrieve all DailyWaterConsumption objects, ordered by date_of_register ascending
-    queryset = DailyWaterConsumption.objects.all().order_by('date_of_register')
+    queryset = DailyWaterConsumption.objects.all().order_by('-date_of_register')
     
     # Specify the serializer class to be used for this view
     serializer_class = DailyWaterConsumptionSerializer

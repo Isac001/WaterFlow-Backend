@@ -29,14 +29,14 @@ urlpatterns = [
     # Include URL patterns from the bimonthly_water_consumption app
     path('bimonthly_water_consumption/', include('apps.bimonthly_water_consumption.urls')),
     # Define the URL pattern for viewing alert water consumption logs (Typo: loga_alert -> logs_alert?)
-    path('loga_alert/', LogsAlertWaterConsumption.as_view()),
+    path('alert_logs/', LogsAlertWaterConsumption.as_view()),
     # Define the URL pattern for viewing daily water consumption logs (Typo: dialy_logs -> daily_logs?)
-    path('dialy_logs/', LogsDialyWaterConsumption.as_view()),
+    path('daily_logs/', LogsDialyWaterConsumption.as_view()),
     # Define the URL pattern for viewing weekly water consumption logs
     path('weekly_logs/', LogsWeeklyWaterConsumption.as_view()),
     # Define the URL pattern for viewing monthly water consumption logs
     path('monthly_logs/', LogsMonthlyWaterConsumption.as_view()),
     # Define the URL pattern for viewing bimonthly water consumption logs (Note: trailing slash is missing, unlike others)
-    path('bimonthly_logs', LogsBimonthlyWaterConsumption.as_view())
+    path('bimonthly_logs/', LogsBimonthlyWaterConsumption.as_view())
 
 ]
