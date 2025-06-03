@@ -8,4 +8,4 @@ class DailyWaterConsumptionSerializer(serializers.ModelSerializer):
     # Meta class defines serializer behavior and configuration
     class Meta:
         model = DailyWaterConsumption  # Specifies which model to serialize
-        fields = ['__all__']  # Includes all model fields in the serialization
+        fields = ['id', 'date_label', 'total_consumption',  'date_of_register']

@@ -1,115 +1,173 @@
+# Import BaseCommand and call_command from Django's core management utilities
 from django.core.management import BaseCommand, call_command
-from django.db import connections
-import psycopg2
-import sys
+# Import Django settings to access database configurations
 from django.conf import settings
+# Import psycopg2 for direct PostgreSQL database interaction
+import psycopg2
+# Import sys for system-specific parameters and functions, like sys.exit
+import sys
 
+
+# Define a new management command by inheriting from BaseCommand
 class Command(BaseCommand):
+    # Add a docstring to describe the command's functionality and warnings
     """
-    Command to completely reset the PostgreSQL database in Docker:
-    1. Drops current database
-    2. Creates new database with proper permissions
-    3. Runs all migrations
+    Django management command to hard reset a PostgreSQL database:
+    1. Drops the existing database (DESTRUCTIVE)
+    2. Creates a new database with the same name
+    3. Runs all Django migrations
+
+    WARNING: This will permanently delete all existing data.
     """
 
-    help = 'Completely resets the PostgreSQL database (DANGEROUS!)'
+    # Define a help string for the command, displayed when running `manage.py help <command_name>`
+    help = '⚠️ Apaga e recria completamente o banco de dados (DROP → CREATE → MIGRATE)'
 
+    # Define a method to add command-line arguments to the command
     def add_arguments(self, parser):
+        # Add a '--confirm' argument, which is a boolean flag
         parser.add_argument(
+            # Argument name
             '--confirm',
+            # Action to store 'true' if the flag is present
             action='store_true',
-            help='Confirms the database reset operation'
-        )
-        parser.add_argument(
-            '--no-migrate',
-            action='store_true',
-            help='Skips running migrations after reset'
+            # Help text for this argument, warning the user
+            help='⚠️ VOCÊ TEM CERTEZA QUE QUER APAGAR O BANCO E RECRIAR? Use esta flag para confirmar.'
         )
 
+    # Define the main logic of the command
     def handle(self, *args, **options):
+        # Get the default database configuration from Django settings
+        db_config = settings.DATABASES['default']
+
+        # Check if the '--confirm' flag was not provided
         if not options['confirm']:
+            # Write an error message to standard output, styled as an error
             self.stdout.write(self.style.ERROR(
-                '🚨 DANGER: This will COMPLETELY DESTROY your database!\n'
-                'All data will be permanently lost!\n'
-                'Add --confirm to actually execute this operation.\n\n'
-                'This will:\n'
-                '1. Drop the current database\n'
-                '2. Create a new database\n'
-                '3. Set up user permissions\n'
-                '4. Run all migrations from scratch'
+                '🚫 OPERAÇÃO CANCELADA.\n'
+                'Esta operação é DESTRUTIVA e apagará todos os dados permanentemente.\n'
+                'Se deseja continuar, execute com a flag: --confirm'
             ))
-            sys.exit(1)
+            # Exit the command if confirmation is not given
+            return
 
-        self.stdout.write(self.style.WARNING('Starting PostgreSQL database reset...'))
-
+        # Start a try block to handle potential exceptions during the reset process
         try:
-            # Get database settings from Django
-            db_settings = settings.DATABASES['default']
-            db_name = db_settings['NAME']
-            db_user = db_settings['USER']
-            db_password = db_settings['PASSWORD']
-            db_host = db_settings['HOST']
-            db_port = db_settings['PORT']
+            # Write a warning message for the first step: dropping the database
+            self.stdout.write(self.style.WARNING('🛑 ETAPA 1/3: Apagando banco de dados...'))
+            # Call the internal method to drop the database
+            self._drop_database(db_config)
 
-            # Connect to postgres database to perform admin operations
-            # Use the same user credentials from settings
-            admin_conn = psycopg2.connect(
-                dbname='postgres',  # Connect to default admin DB
-                user=db_user,        # Use the configured user
-                password=db_password,
-                host=db_host,
-                port=db_port
-            )
-            admin_conn.autocommit = True  # Required for DB operations
-            cursor = admin_conn.cursor()
+            # Write a warning message for the second step: creating the database
+            self.stdout.write(self.style.WARNING('🛠️ ETAPA 2/3: Criando novo banco de dados...'))
+            # Call the internal method to create the database
+            self._create_database(db_config)
 
-            # Step 1: Terminate all existing connections
-            self.stdout.write(self.style.WARNING('Terminating existing connections...'))
-            cursor.execute(f"""
-                SELECT pg_terminate_backend(pg_stat_activity.pid)
-                FROM pg_stat_activity
-                WHERE pg_stat_activity.datname = '{db_name}'
-                AND pid <> pg_backend_pid();
-            """)
-            self.stdout.write(self.style.SUCCESS('✅ All connections terminated'))
+            # Write a warning message for the third step: running migrations
+            self.stdout.write(self.style.WARNING('🔁 ETAPA 3/3: Executando migrações...'))
+            # Call the 'migrate' management command with verbosity level 1
+            call_command('migrate', verbosity=1)
 
-            # Step 2: Drop the database
-            self.stdout.write(self.style.WARNING(f'Dropping database {db_name}...'))
-            cursor.execute(f'DROP DATABASE IF EXISTS {db_name}')
-            self.stdout.write(self.style.SUCCESS(f'✅ Database {db_name} dropped'))
+            # Write a success message after all steps are completed
+            self.stdout.write(self.style.SUCCESS('✅ Banco de dados recriado e migrado com sucesso!'))
 
-            # Step 3: Create new database
-            self.stdout.write(self.style.WARNING(f'Creating database {db_name}...'))
-            cursor.execute(f'CREATE DATABASE {db_name}')
-            self.stdout.write(self.style.SUCCESS(f'✅ Database {db_name} created'))
-
-            # Step 4: Set up user permissions
-            self.stdout.write(self.style.WARNING(f'Setting up user {db_user}...'))
-            # First grant all privileges on the new database
-            cursor.execute(f'GRANT ALL PRIVILEGES ON DATABASE {db_name} TO {db_user}')
-            # Then grant privileges on public schema
-            cursor.execute(f'GRANT ALL PRIVILEGES ON SCHEMA public TO {db_user}')
-            self.stdout.write(self.style.SUCCESS('✅ User permissions configured'))
-
-            cursor.close()
-            admin_conn.close()
-
-            # Re-establish Django connection
-            connections.close_all()
-
-            # Step 5: Run migrations if not skipped
-            if not options['no_migrate']:
-                self.stdout.write(self.style.WARNING('Running migrations...'))
-                call_command('makemigrations', verbosity=0)
-                call_command('migrate', verbosity=0)
-                self.stdout.write(self.style.SUCCESS('✅ Migrations completed'))
-
-            # Final verification
-            with connections['default'].cursor() as cursor:
-                cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
-                tables = cursor.fetchall()
-                self.stdout.write(self.style.SUCCESS(f'✅ Reset complete. Found {len(tables)} tables'))
-
+        # Catch any exception that occurs during the try block
         except Exception as e:
-            self.stdout.write(self.style.ERROR(f'❌ Error during reset: {str(e)}'))
+            # Write an error message to standard error, styled as an error
+            self.stderr.write(self.style.ERROR(f'❌ Erro durante o processo: {e}'))
+            # Exit the script with an error code
             sys.exit(1)
+
+    # Define an internal method to drop the database
+    def _drop_database(self, db_config):
+        # Add a docstring to describe the method's functionality
+        """
+        Drops the current database after terminating all active connections.
+        """
+        # Initialize the connection variable to None
+        connection = None
+        # Start a try block for database operations
+        try:
+            # Connect to the 'postgres' database (a default maintenance database)
+            connection = psycopg2.connect(
+                # Database name to connect initially
+                dbname='postgres', 
+                # User from the Django settings
+                user=db_config['USER'],
+                # Password from the Django settings
+                password=db_config['PASSWORD'],
+                # Host from the Django settings
+                host=db_config['HOST'],
+                # Port from the Django settings
+                port=db_config['PORT']
+            )
+            # Set autocommit to True to execute commands immediately without a transaction block
+            connection.autocommit = True
+            # Create a cursor object to execute SQL commands
+            cursor = connection.cursor()
+
+            # SQL command to terminate active connections to the target database
+            # This is necessary before dropping the database
+            cursor.execute("""
+                SELECT pg_terminate_backend(pid)
+                FROM pg_stat_activity
+                WHERE datname = %s AND pid <> pg_backend_pid();
+            """, (db_config['NAME'],)) # Pass the target database name as a parameter
+
+            # SQL command to drop the target database if it exists
+            # Use f-string for the database name, ensure it's quoted if it contains special characters or case sensitivity matters
+            cursor.execute(f'DROP DATABASE IF EXISTS "{db_config["NAME"]}"')
+
+        # Catch psycopg2 specific errors
+        except psycopg2.Error as e:
+            # Raise a new exception with a custom error message
+            raise Exception(f"Erro ao apagar banco de dados: {e}")
+        # Define a finally block to ensure resources are released
+        finally:
+            # Check if the connection was established
+            if connection:
+                # Close the database connection
+                connection.close()
+
+    # Define an internal method to create the database
+    def _create_database(self, db_config):
+        # Add a docstring to describe the method's functionality
+        """
+        Creates a new database with the same name.
+        """
+        # Initialize the connection variable to None
+        connection = None
+        # Start a try block for database operations
+        try:
+            # Connect to the 'postgres' database
+            connection = psycopg2.connect(
+                # Database name to connect initially
+                dbname='postgres',
+                # User from the Django settings
+                user=db_config['USER'],
+                # Password from the Django settings
+                password=db_config['PASSWORD'],
+                # Host from the Django settings
+                host=db_config['HOST'],
+                # Port from the Django settings
+                port=db_config['PORT']
+            )
+            # Set autocommit to True
+            connection.autocommit = True
+            # Create a cursor object
+            cursor = connection.cursor()
+
+            # SQL command to create the new database
+            # Use f-string for the database name, quoting it to preserve case or handle special characters
+            cursor.execute(f'CREATE DATABASE "{db_config["NAME"]}"')
+
+        # Catch psycopg2 specific errors
+        except psycopg2.Error as e:
+            # Raise a new exception with a custom error message
+            raise Exception(f"Erro ao criar banco de dados: {e}")
+        # Define a finally block
+        finally:
+            # Check if the connection was established
+            if connection:
+                # Close the database connection
+                connection.close()
