@@ -1,16 +1,15 @@
-# Import APIView for creating API endpoints
+# Django and Python Imports
 from rest_framework.views import APIView
-# Import status codes, generic views, and Response object
 from rest_framework import status, generics, response
-# Import the serializer for AlertWaterConsumption model
-from .serializers import AlertWaterConsumptionSerializer
-# Import the AlertWaterConsumption model
-from .models import AlertWaterConsumption
-# Import IsAuthenticated permission class for view access control
 from rest_framework.permissions import IsAuthenticated
+
+# Project Imports
+from .serializers import AlertWaterConsumptionSerializer
+from .models import AlertWaterConsumption
 
 # Define a class-based view for listing water consumption alerts
 class AlertWaterConsumptionView(generics.ListAPIView):
+    
     """
     API view to retrieve a list of AlertWaterConsumption records.
     Inherits from generics.ListAPIView for standard list functionality.

@@ -1,11 +1,11 @@
-# Import DRF's serializers module and the model we'll serialize
+# Django and Project Imports
 from rest_framework import serializers
-from .models import DailyWaterConsumption  # Note: Typo in model name ('Dialy' should be 'Daily')
+from .models import DailyWaterConsumption 
 
-# Serializer for DialyWaterConsumption model (converts model instances to JSON and vice versa)
+# Serializer for DialyWaterConsumption model 
 class DailyWaterConsumptionSerializer(serializers.ModelSerializer):
     
-    # Meta class defines serializer behavior and configuration
+    # Meta class 
     class Meta:
-        model = DailyWaterConsumption  # Specifies which model to serialize
+        model = DailyWaterConsumption  
         fields = ['id', 'date_label', 'total_consumption',  'date_of_register']

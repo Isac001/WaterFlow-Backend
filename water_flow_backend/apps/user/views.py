@@ -1,27 +1,22 @@
-# Import ValidationError from Django forms
+# Django and Python Imports
 from django.forms import ValidationError
-# Import APIView for creating custom API endpoints
 from rest_framework.views import APIView
-# Import Response for sending HTTP responses
 from rest_framework.response import Response
-# Import generics for generic class-based views, response, and status codes
 from rest_framework import generics, response, status
-# Import IsAuthenticated permission class to ensure user is logged in
 from rest_framework.permissions import IsAuthenticated
-# Import ObjectDoesNotExist exception for handling cases where an object is not found
 from django.core.exceptions import ObjectDoesNotExist
-# Import IntegrityError for handling database integrity violations
 from django.db import IntegrityError
-# Import get_object_or_404 shortcut for retrieving an object or raising a 404 error
 from django.shortcuts import get_object_or_404
-# Import base views for JWT token refresh and obtaining token pairs
 from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
-# Import the base Exception class
 from builtins import Exception
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.token_blacklist.models import (
+    BlacklistedToken,
+    OutstandingToken,
+)
 
-# Import the User model from the current app
+# Project Imports
 from .models import User
-# Import all serializers from the current app's serializers module
 from .serializers import *
 
 # Define a custom view for obtaining JWT token pairs
@@ -32,6 +27,7 @@ class CustomTokenObtainPairVie(APIView): # Typo: should likely be CustomTokenObt
 
         # Instantiate the custom token serializer with request data
         serializer = CustomTokenObtainPairSerializer(data=request.data)
+
         # Check if the serializer data is valid
         if serializer.is_valid():
 
@@ -52,8 +48,10 @@ class UserListView(generics.ListAPIView):
 
     # Specify that only authenticated users can access this view
     permission_classes = (IsAuthenticated,)
+
     # Specify the serializer class to be used for User objects
     serializer_class = UserSerializer
+
     # Define the queryset to retrieve all User objects
     queryset = User.objects.all()
 
@@ -64,13 +62,16 @@ class UserListView(generics.ListAPIView):
         try:
             # Get the queryset of users
             users = self.get_queryset()
+
             # Serialize the list of users
             serializers = self.serializer_class(users, many=True)
+
             # Return the serialized user data with a 200 OK status
             return response.Response(serializers.data, status=status.HTTP_200_OK)
         
         # Catch any generic exception
         except Exception as e:
+
             # Return the string representation of the error with a 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
         
@@ -85,8 +86,10 @@ class UserDetailView(generics.RetrieveAPIView):
 
     # Specify that only authenticated users can access this view
     permission_classes = (IsAuthenticated,)
+
     # Specify the serializer class to be used for User objects
     serializer_class = UserSerializer
+
     # Define the queryset to retrieve all User objects (actual filtering by pk happens in get)
     queryset = User.objects.all()
 
@@ -95,18 +98,22 @@ class UserDetailView(generics.RetrieveAPIView):
 
         # Start a try block to handle potential exceptions
         try:
+
             # Serialize the user object retrieved by primary key
             serializer = self.serializer_class(self.queryset.get(pk=pk))
+
             # Return the serialized user data with a 200 OK status
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         
         # Catch ObjectDoesNotExist exception if the user is not found
         except ObjectDoesNotExist:
+
             # Return a message indicating the user does not exist with a 404 Not Found status
             return response.Response(data={"message": "The user does not exist"}, status=status.HTTP_404_NOT_FOUND)
         
         # Catch any other generic exception
         except Exception as e:
+
             # Return the string representation of the error with a 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
         
@@ -114,7 +121,8 @@ class UserDetailView(generics.RetrieveAPIView):
 class UserCreateView(generics.CreateAPIView):
 
     # Specify the serializer class to be used for creating User objects
-    serializer_class = UserSerializer # Consider using UserCreateSerializer if it has different logic
+    serializer_class = UserCreateSerializer 
+
     # Define the queryset (used by generic views, though post is overridden here)
     queryset = User.objects.all()
 
@@ -126,11 +134,13 @@ class UserCreateView(generics.CreateAPIView):
 
             # Instantiate the serializer with request data
             serializer = self.serializer_class(data=request.data)
+
             # Check if the serializer data is valid
             if serializer.is_valid():
 
                 # Save the new user object
                 serializer.save()
+
                 # Return the serialized data of the created user with a 201 Created status
                 return response.Response(serializer.data, status=status.HTTP_201_CREATED)
             
@@ -148,6 +158,7 @@ class UserCreateView(generics.CreateAPIView):
         
         # Catch any other generic exception
         except Exception as e:
+
             # Return a generic internal server error message with a 500 Internal Server Error status
             return response.Response({"ERROR": f"Internal server error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -156,8 +167,10 @@ class UserUpdateView(generics.RetrieveUpdateAPIView):
 
     # Specify that only authenticated users can access this view
     permission_classes = (IsAuthenticated,)
+
     # Specify the serializer class to be used (consider UserUpdateSerializer if different)
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer
+
     # Define the queryset to retrieve all User objects
     queryset = User.objects.all()
 
@@ -169,6 +182,7 @@ class UserUpdateView(generics.RetrieveUpdateAPIView):
 
             # Get the user object to be updated, or raise 404 if not found
             user = get_object_or_404(User, pk=pk)
+
             # Instantiate the serializer with the user instance and request data, allowing partial updates
             serializer = self.serializer_class(user, data=request.data, partial=True)
 
@@ -177,6 +191,7 @@ class UserUpdateView(generics.RetrieveUpdateAPIView):
 
                 # Save the updated user object
                 serializer.save()
+
                 # Return the serialized data of the updated user with a 200 OK status
                 return response.Response(serializer.data, status=status.HTTP_200_OK)
             
@@ -205,21 +220,25 @@ class UserDeleteView(generics.RetrieveDestroyAPIView):
 
     # Specify that only authenticated users can access this view
     permission_classes = (IsAuthenticated,)
+
     # Specify the serializer class (used for retrieving before deleting)
     serializer_class = UserSerializer
+
     # Define the queryset to retrieve all User objects
     queryset = User.objects.all()
 
     # Override the delete method (handles DELETE requests)
-    def delete(self, request, pk): # Note: `pk` is passed from URL
+    def delete(self, request, pk): 
 
         # Start a try block to handle potential exceptions
         try:
 
             # Get the user object to be deleted, or raise 404 if not found
             user = get_object_or_404(User, pk=pk)
+
             # Delete the user object
             user.delete()
+
             # Return a message indicating successful deletion with a 204 No Content status
             return response.Response(data= {"message": "User deleted"},status=status.HTTP_204_NO_CONTENT)
 
@@ -239,3 +258,32 @@ class UserDeleteView(generics.RetrieveDestroyAPIView):
         except Exception as e:
             # Return a generic internal server error message with a 500 Internal Server Error status
             return response.Response({"ERROR": f"Internal server error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Define a view to logout of user in the mobile app        
+class Logout(generics.CreateAPIView):
+
+    # If the user is authenticated, they will have access to the method
+    permission_classes = (IsAuthenticated, )
+
+    # Overriding the method
+    def post(self, request):
+
+        try:
+            
+            # Blacklist all outstanding tokens
+            tokens = OutstandingToken.objects.filter(user_id=request.user.id)
+
+            # For each token in the list blacklist it in the database
+            for token in tokens:
+                
+                # Blacklist the token
+                t, _ = BlacklistedToken.objects.get_or_create(token=token)
+
+            # Return a response with status HTTP 205 Reset Content
+            return response.Response(status=status.HTTP_205_RESET_CONTENT)
+
+        except TokenError:
+            
+            # Return a response with status HTTP 401 Unauthorized
+            return response.Response(status=status.HTTP_401_UNAUTHORIZED)
+    

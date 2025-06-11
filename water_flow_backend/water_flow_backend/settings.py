@@ -26,6 +26,7 @@ ALLOWED_HOSTS = ['*']
 
 # Installed applications for this project
 INSTALLED_APPS = [
+    
     # Default Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'core',
 ]
 
+# Set the model to authenticated
 AUTH_USER_MODEL = 'user.User'
 
 # JWT token configuration settings
@@ -78,6 +80,7 @@ REST_FRAMEWORK = {
     
 }
 
+# Set the authentication bakcends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]

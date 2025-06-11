@@ -1,57 +1,70 @@
-# Import models from Django's database module
+# Django imports
 from django.db import models
-# Import gettext_lazy for internationalization of messages
 from django.utils.translation import gettext_lazy as _
-# Import base user classes and permission-related models from Django's auth module
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Group, Permission
-# Import the custom UserManager from the user app's managers
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+
+# Project imports
 from apps.user.managers import UserManager
 
 
-# Define a custom User model inheriting from AbstractBaseUser and PermissionsMixin
+# Custom User model
 class User(AbstractBaseUser, PermissionsMixin):
 
-    # Define a character field for the user's name
-    user_name = models.CharField(_("Name of User"), max_length=255, null=False)
-    # Define an email field for the user's email, ensuring it's unique
-    user_email = models.EmailField(_("Email of User"), max_length=255, null=False, unique=True)
-    # Define a character field for the user's CPF (Brazilian individual taxpayer registry ID), ensuring it's unique
-    user_cpf = models.CharField(_("CPF User"), max_length=14, null=False, unique=True)
-    # Define a character field for the user's password
-    password = models.CharField(_("Password of User"), max_length=255, null=False)
+    """
+    Custom user model that uses email for authentication instead of username.
+    """
 
-    # Define a boolean field to indicate if the user is an admin/staff
-    is_staff = models.BooleanField(_("Admin?"), default=False)
-    # Define a boolean field to indicate if the user account is active
-    is_active = models.BooleanField(_("Active?"), default=True)
-    # Define a boolean field to indicate if the user is trusty (custom flag)
-    is_trusty = models.BooleanField(_("Trusty?"), default=True)
+    # User fields
+    user_name = models.CharField(_("Name of User"), max_length=255)
+    user_email = models.EmailField(_("Email of User"), max_length=255, unique=True)
+    user_cpf = models.CharField(_("CPF User"), max_length=14, unique=True)
+    password = models.CharField(_("Password of User"), max_length=255)
 
-    # Specify the field to be used as the unique identifier for authentication
-    USERNAME_FIELD = 'user_email'
-    # Specify additional fields required when creating a user via createsuperuser
-    REQUIRED_FIELDS = ['user_cpf']
+    # Boolean flags for user status and permissions
+    is_staff = models.BooleanField(
+        _("Admin status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
 
-    # Assign the custom UserManager to the objects manager for this model
+    # Boolean flags for user status and permissions
+    is_active = models.BooleanField(
+        _("Active"),
+        default=True,
+        help_text=_(
+            "Designates whether this user should be treated as active. "
+            "Unselect this instead of deleting accounts."
+        ),
+    )
+
+    # Boolean flags for user status and permissions
+    is_trusty = models.BooleanField(
+        _("Trusty status"),
+        default=True,
+        help_text=_("Designates whether this user is considered trustworthy."),
+    )
+
+    # Manager and authentication fields
     objects = UserManager()
+    USERNAME_FIELD = 'user_email'
+    REQUIRED_FIELDS = ['user_name', 'user_cpf']
 
-    # Define the string representation of the model instance
+    # String representation of the model
     def __str__(self):
-
-        # Return the user's email as their string representation
+        """Returns the email of the user as its string representation."""
         return self.user_email
     
-    # Define metadata for the model
+    # Meta class for model settings
     class Meta:
 
-        # Specify the database table name for this model
-        db_table = 'user'
-        # Specify the application label for this model
+        """
+        Model metadata configuration.
+        """
         app_label = 'user'
-        # Define database constraints for the model
+        db_table = 'user'
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
         constraints = [
-            # Ensure user_email values are unique across the table
             models.UniqueConstraint(fields=['user_email'], name='unique_user_email'),
-            # Ensure user_cpf values are unique across the table
             models.UniqueConstraint(fields=['user_cpf'], name='unique_user_cpf'),
         ]

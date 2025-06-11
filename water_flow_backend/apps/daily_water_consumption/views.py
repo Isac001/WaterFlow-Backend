@@ -1,17 +1,15 @@
-# Import APIView for creating custom API endpoints
+# Django and Python Imports
 from rest_framework.views import APIView
-# Import status for HTTP status codes, generics for generic views, and response for API responses
 from rest_framework import status, generics, response
-# Import the DailyWaterConsumptionSerializer from the current app's serializers
-from .serializers import DailyWaterConsumptionSerializer
-# Import the DailyWaterConsumption model from the current app's models
-from .models import DailyWaterConsumption  
-# Import IsAuthenticated permission class to ensure user is logged in
 from rest_framework.permissions import IsAuthenticated
+
+# Project Imports
+from .serializers import DailyWaterConsumptionSerializer
+from .models import DailyWaterConsumption  
 
 # Define a class-based view for listing daily water consumption records
 class DailyWaterConsumptionView(generics.ListAPIView):
-    # Add a docstring to describe the API endpoint
+
     """
     API endpoint that allows viewing daily water consumption records.
     Requires authentication.
@@ -28,15 +26,17 @@ class DailyWaterConsumptionView(generics.ListAPIView):
 
     # Define the handler for GET requests
     def get(self, request):
-        # Add a docstring to describe the GET method
+
         """
         Handle GET request to list all daily water consumption records.
         Returns:
             - 200 OK with serialized data on success
             - 400 Bad Request with error message on failure
         """
+
         # Start a try block to handle potential exceptions
         try:
+
             # Retrieve the queryset for this view
             queryset = self.get_queryset()
 
@@ -60,5 +60,6 @@ class DailyWaterConsumptionView(generics.ListAPIView):
         
         # Catch any exception that might occur
         except Exception as e:
+
             # If an error occurs, return the error message with an HTTP 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)

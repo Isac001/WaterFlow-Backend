@@ -1,43 +1,41 @@
-# Import models from Django's database module
+# Import Django
 from django.db import models
-# Import timezone utilities from Django
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
-# Define a model for tracking daily water consumption
+# Daily water consumption model
 class DailyWaterConsumption(models.Model):
-    # Define a character field for a human-readable date label
-    date_label = models.CharField(
-        # Set the maximum length of the string
-        max_length=255,
-        # Set the verbose name for display in the admin interface
-        verbose_name="Rótulo do Dia",
-        # Provide help text for this field in forms
-        help_text="EX: 'Dia 1 de Janeiro de 2025'"
-    )
-
-    # Define a date field for the registration date, defaulting to the current time
-    date_of_register = models.DateField(default=timezone.now)
-
-    # Define a decimal field for the total water consumption
-    total_consumption = models.DecimalField(
-        # Set the maximum number of digits allowed, including decimal places
-        max_digits=20,
-        # Set the number of decimal places
-        decimal_places=2,
-        # Set the verbose name for display in the admin interface
-        verbose_name="Consumo Total (L)",
-        # Provide help text for this field in forms
-        help_text="Consumo total em L/min"
-    )
-
-    # Define the string representation of the model instance
-    def __str__(self):
-        # Return a formatted string with the date label and total consumption
-        return f"{self.date_label} - {self.total_consumption} L/min"
     
-    # Define metadata for the model
+    # Day label field (text)
+    date_label = models.CharField(
+        max_length=255,
+        verbose_name=_("Rótulo do Dia"),
+        help_text=_("EX: '01 de Janeiro de 2025'")
+    )
+
+    # Registration date field, defaults to the current date
+    date_of_register = models.DateField(
+        default=timezone.now,
+        verbose_name=_("Data do Registro")
+    )
+
+    # Total consumption field (decimal)
+    total_consumption = models.DecimalField(
+        max_digits=20,
+        decimal_places=2,
+        verbose_name=_("Consumo Total (L)"),
+        help_text=_("Consumo total de água no dia em Litros")
+    )
+
+    # String representation of the model
+    def __str__(self):
+        # Return formatted label and consumption
+        return f"{self.date_label} - {self.total_consumption} L"
+    
+    # Meta class for model settings
     class Meta:
-        # Specify the application label for this model
+        
         app_label = 'daily_water_consumption'
-        # Specify the database table name for this model
         db_table = 'daily_water_consumption'
+        ordering = ['-date_of_register']
+        

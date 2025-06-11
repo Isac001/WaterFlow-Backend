@@ -11,9 +11,6 @@ from .models import AlertWaterConsumption
 
 logger = logging.getLogger(__name__)
 
-
-
-
 # Method to parse date from a label
 def parse_date_label(date_label):
 
@@ -139,8 +136,11 @@ def check_for_alerts():
 
         # If no latest consumption is found, log a warning and return None
         if not latest_consumption:
+
             logger.warning("No latest water consumption found.")
+            
             return None
+        
         # Convert average to Decimal for precise calculations
         average = Decimal(average)
 
