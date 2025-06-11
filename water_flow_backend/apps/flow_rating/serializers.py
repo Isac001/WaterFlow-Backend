@@ -1,11 +1,9 @@
-# Import the serializers module from Django REST framework
+# Django and Python Imports
 from rest_framework import serializers  
-# Import localtime utility for timezone conversion
 from django.utils.timezone import localtime
-# Import date_format utility for formatting dates and times
 from django.utils.formats import date_format
 
-# Import the FlowRating model from the current directory's models
+# Project Imports
 from .models import FlowRating
 
 # Define a serializer class for the FlowRating model

@@ -1,28 +1,22 @@
-# Import shared_task decorator from Celery for creating asynchronous tasks
+# Django and Python Imports
 from celery import shared_task
-# Import the utility function for monthly water consumption calculation
-from apps.monthly_water_consumption.utils import monthly_water_consumption
-# Import Django settings to access project configurations
 from django.conf import settings
-# Import datetime for handling timestamps
 from datetime import datetime
+
+# Project Imports
+from apps.monthly_water_consumption.utils import monthly_water_consumption
 
 
 # Decorate the function as a shared Celery task with specific configurations
 @shared_task(
-    # Bind the task instance (self) to the function
     bind=True,
-    # Set the maximum number of retries for the task in case of failure
     max_retries=3,
-    # Set a soft time limit for task execution in seconds (soft_time_limit is preferred term)
     soft_timeout=300,
-    # Set the priority of the task
     priority=5,
 )
 # Define the Celery task function for monthly water consumption
 def monthly_water_consumption_task(self):
 
-    # Add a docstring to describe the Celery task
     """
     Celery task to calculate and store monthly water consumption.
     """
@@ -38,22 +32,20 @@ def monthly_water_consumption_task(self):
 
         # Open the audit log file in append mode with UTF-8 encoding
         with open(audit_logs_path, "a", encoding="utf-8") as audit_file:
+
             # Check if this log entry marks the start of a task
             if is_start:
-                # Write an opening brace for the task log block
                 audit_file.write("{\n")
-                # Format the log entry for task start
                 log_entry = f"      TASK INICIADA: {message} | [{timestamp}]\n"
 
             # Check if this log entry marks the end of a task
             elif is_end:
-                # Format the log entry for task end
                 log_entry = f"      TASK FINALIZADA! | [{timestamp}]\n"
-                # Add a closing brace and newlines for the task log block
                 log_entry += "}\n\n"
 
             # For regular log messages within the task
             else:
+
                 # Format a regular log entry
                 log_entry = f"      {message}\n"
 
@@ -67,7 +59,7 @@ def monthly_water_consumption_task(self):
         write_log("Iniciando task de consumo mensal...", is_start=True)
 
         # Call the function to calculate monthly water consumption
-        task_in_working = monthly_water_consumption() # Stores the created MonthlyWaterConsumption object or None
+        task_in_working = monthly_water_consumption() 
 
         # Check if the monthly consumption was not processed (e.g., already exists or no data)
         if not task_in_working:

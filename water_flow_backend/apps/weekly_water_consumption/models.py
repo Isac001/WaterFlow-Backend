@@ -1,55 +1,48 @@
-# Import models from Django's database module
+# Django imports
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-# Define a model for tracking weekly water consumption
+# Weekly water consumption model
 class WeeklyWaterConsumption(models.Model):
 
-    # Define a character field for a human-readable week label
+    # Week label field (text)
     date_label = models.CharField(
-        # Set the maximum length of the string
         max_length=255, 
-        # Set the verbose name for display in the admin interface
-        verbose_name="Rótulo da Semana",
-        # Provide help text for this field in forms
-        help_text="EX: 'Semana 01 - 07 de Janeiro de 2025'"
+        verbose_name=_("Rótulo da Semana"),
+        help_text=_("EX: 'Semana de 01 a 07 de Janeiro de 2025'")
     )       
    
-    # Define a date field for the start date of the week
+    # Week start date field
     start_date = models.DateField(
-        # Set the verbose name for display in the admin interface
-        verbose_name="Data de Início"
+        verbose_name=_("Data de Início da Semana")
     )
 
-    # Define a date field for the end date of the week
+    # Week end date field
     end_date = models.DateField(
-        # Set the verbose name for display in the admin interface
-        verbose_name="Data de Fim"
+        verbose_name=_("Data de Fim da Semana")
     )
 
-    # Define a decimal field for the total water consumption during the week
+    # Total consumption field for the week (decimal)
     total_consumption = models.DecimalField(
-        # Set the maximum number of digits allowed, including decimal places
         max_digits=20,
-        # Set the number of decimal places for precision
         decimal_places=2,
-        # Set the verbose name for display in the admin interface
-        verbose_name="Consumo Total (L)",
-        # Provide help text for this field in forms
-        help_text="Consumo total em L/min")
+        verbose_name=_("Consumo Total (L)"),
+        help_text=_("Consumo total de água na semana em Litros")
+    )
 
-    # Define the string representation of the model instance
+    # String representation of the model instance
     def __str__(self):
-        
-        
-        # Return a formatted string with the date label and total consumption
-        return f"{self.date_label} - {self.total_consumption} L/min"
+        """
+        Returns a string representation of the weekly consumption.
+        Format: "Week Label - XXXX L"
+        """
+        # Return formatted label and total consumption
+        return f"{self.date_label} - {self.total_consumption} L"
 
-    # Define metadata for the model
+    # Meta class for model settings
     class Meta:
-
-        # Specify the application label for this model
+       
         app_label = 'weekly_water_consumption'
-        # Specify the custom database table name for this model
         db_table = 'weekly_water_consumption'
-        # Define the default ordering for querysets, newest weeks first by start date
         ordering = ['-start_date']
+      

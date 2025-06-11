@@ -1,13 +1,11 @@
-# Import the serializers module from Django REST framework
+# Django and Python Imports
 from rest_framework import serializers
-# Import the User model from the current app's models
-from .models import User
-# Import RefreshToken from rest_framework_simplejwt for generating JWT tokens
 from rest_framework_simplejwt.tokens import RefreshToken
-# Import get_user_model to retrieve the currently active User model
 from django.contrib.auth import get_user_model
-# Import Q objects for complex database queries
 from django.db.models import Q
+
+# Project Imports
+from .models import User
 
 
 # Define a serializer for the User model (general purpose)
@@ -15,8 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     # Define metadata options for the serializer
     class Meta:
+
         # Specify the model that this serializer will work with
         model = User
+
         # Define the list of fields to include in the serialized output
         fields = ['id', 'user_name', 'user_email', 'user_cpf', 'password']
 
@@ -25,8 +25,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     # Define metadata options for the serializer
     class Meta:
+
         # Specify the model that this serializer will work with
         model = User
+
         # Define the list of fields to include for user creation
         fields = ['id', 'user_name', 'user_email', 'user_cpf', 'password']
 
@@ -35,8 +37,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
         # Extract the password from validated_data, or set to None if not present
         password = validated_data.pop('password', None)
+
         # Create a new User object with the remaining validated data and the extracted password
         user = User.objects.create(**validated_data, password=password)
+
         # Return the created user instance
         return user
     
@@ -45,8 +49,10 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     # Define metadata options for the serializer
     class Meta:
+
         # Specify the model that this serializer will work with
         model = User
+
         # Define the list of fields that can be updated
         fields = ['id', 'user_name', 'user_email', 'user_cpf', 'password']
 
@@ -55,8 +61,10 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
         # Update the user_name field if provided in validated_data, otherwise keep the existing value
         instance.user_name = validated_data.get('user_name', instance.user_name)
+
         # Save the updated user instance to the database
         instance.save()
+
         # Return the updated user instance
         return instance
     
@@ -65,6 +73,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
     # Define an email field for user input
     user_email = serializers.EmailField()
+
     # Define a password field for user input, write-only means it's not included in response
     password = serializers.CharField(write_only=True)
 
@@ -73,6 +82,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
         # Get the email from the input attributes
         email = attrs.get('user_email')
+
         # Get the password from the input attributes
         password = attrs.get('password')
 
@@ -96,6 +106,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
 
         # Generate a refresh token for the user
         refresh = RefreshToken.for_user(user)
+        
         # Return a dictionary containing the refresh and access tokens
         return {
             "refresh": str(refresh),

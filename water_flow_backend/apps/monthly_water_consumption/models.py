@@ -1,67 +1,45 @@
-# Import the models module from Django's database utilities
+# Django imports
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-# Define a model for monthly water consumption
+# Monthly water consumption model
 class MonthlyWaterConsumption(models.Model):
-    # Add a docstring to describe the model's purpose
-    """
-    Tracks and stores monthly water consumption data.
-    Each record represents water usage for a calendar month.
-    """
 
-    # Define a character field for a human-readable month label
+    # Month label field (text)
     date_label = models.CharField(
-        # Set the maximum length of the string
         max_length=255,
-        # Set the verbose name for display in the admin interface
-        verbose_name="Rótulo do Mês",
-        # Provide help text for this field in forms
-        help_text="EX: 'Janeiro de 2025'"
+        verbose_name=_("Rótulo do Mês"),
+        help_text=_("EX: 'Janeiro de 2025'")
     )
 
-    # Define a date field for the start date of the month
+    # Month start date field
     start_date = models.DateField(
-        # Set the verbose name for display in the admin interface
-        verbose_name="Data de Início do Mês"
+        verbose_name=_("Data de Início do Mês")
     )
 
-    # Define a date field for the end date of the month
+    # Month end date field
     end_date = models.DateField(
-        # Set the verbose name for display in the admin interface
-        verbose_name="Data do Fim do Mês"
+        verbose_name=_("Data de Fim do Mês")
     )
 
-    # Define a decimal field for the total water consumption
+    # Total consumption field (decimal)
     total_consumption = models.DecimalField(
-        # Set the maximum number of digits allowed, including decimal places
         max_digits=20,
-        # Set the number of decimal places for precision
         decimal_places=2,
-        # Set the verbose name for display in the admin interface
-        verbose_name="Consumo Total (L)",
-        # Provide help text for this field in forms
-        help_text="Consumo total em L/min"
+        verbose_name=_("Consumo Total (L)"),
+        help_text=_("Consumo total de água no mês em Litros")
     )
 
-    # Define the string representation of the model instance
+    # String representation of the model instance
     def __str__(self):
-        # Add a docstring to describe the string representation
-        """
-        String representation of monthly consumption.
-        Format: "Month Year - XXXX L/min" (e.g., "Janeiro 2025 - 1250.50 L/min")
-        """
-        # Return a formatted string with the date label and total consumption
-        return f"{self.date_label} - {self.total_consumption} L/min"
+        
+        # Return formatted label and total consumption
+        return f"{self.date_label} - {self.total_consumption} L"
     
-    # Define metadata for the model
+    # Meta class for model settings
     class Meta:
-        # Add a docstring to describe the Meta class
-        """
-        Model metadata configuration.
-        """
-        # Specify the application label for this model
+        
         app_label = 'monthly_water_consumption'
-        # Specify the custom database table name for this model
         db_table = 'monthly_water_consumption'
-        # Define the default ordering for querysets, newest months first
         ordering = ['-start_date']
+        

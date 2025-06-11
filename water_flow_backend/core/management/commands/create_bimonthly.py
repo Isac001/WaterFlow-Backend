@@ -1,21 +1,17 @@
-# Import Decimal for precise arithmetic operations
+# Django and Python Imports
 from decimal import Decimal
-# Import BaseCommand for creating custom management commands
 from django.core.management.base import BaseCommand
-# Import the BimonthlyWaterConsumption model (though not directly used for creation in this script, it's related)
-from apps.bimonthly_water_consumption.models import BimonthlyWaterConsumption
-# Import the MonthlyWaterConsumption model for creating test data
-from apps.monthly_water_consumption.models import MonthlyWaterConsumption
-# Import datetime and timedelta for date and time manipulations
 from datetime import datetime, timedelta
-# Import random for generating random numbers
 import random
-# Import the Celery task for bimonthly water consumption calculation
+
+# Project Imports
 from core.celery_tasks import bimonthly_water_consumption_task
+from apps.monthly_water_consumption.models import MonthlyWaterConsumption
 
 
 # Define a new management command by inheriting from BaseCommand
 class Command(BaseCommand):
+    
     # Define a help string for the command
     help = 'Gera dados falsos de consumo mensal para teste de consumo bimestral'
 
@@ -33,45 +29,44 @@ class Command(BaseCommand):
 
         # Start a try block to handle potential exceptions
         try: 
-            # Add a docstring to describe the method's purpose
-            """
-            Cria dados para teste bimestral
-            """
+           
             # Get the current date and time
             today = datetime.now()
+
             # Get the current year
             current_year = today.year
 
             # Calculate the first month of the current bimester (e.g., if today is June (month 6), first_month is 5 (May))
             first_month_in_period = ((today.month - 1) // 2) * 2 + 1
+
             # Create a list containing the two months of the current bimester
             months_in_period = [first_month_in_period, first_month_in_period + 1]
 
             # Initialize the total consumed in the period to zero
             total_consumed_in_period = Decimal('0.00')
+
             # Initialize an empty list to store created monthly data (optional, not used later in this version)
             monthly_data = []
 
             # Loop through each month in the calculated bimester period
             for month in months_in_period:
+
                 # Set the initial year for the current month
                 year = current_year
-                # Handle cases where the bimester spans across years (e.g., Nov-Dec, then Jan of next year)
-                # This logic seems specific if `first_month_in_period` could be 12, making `month` 13.
-                # Standard bimesters (Jan-Feb, Mar-Apr, etc.) won't make `month > 12` if `first_month_in_period` is correct.
-                # Assuming `first_month_in_period` is always odd and <= 11, `month` will be at most 12.
-                # If `first_month_in_period` is 11, `months_in_period` is [11, 12].
-                # If `first_month_in_period` is 1, `months_in_period` is [1, 2].
 
                 # Determine the first day of the current month in the loop
                 first_day = datetime(year, month, 1)
+
                 # Determine the last day of the current month
                 # If the current month is December
                 if month == 12:
+
                     # The last day is December 31st
                     last_day = datetime(year, 12, 31) # Simpler way: datetime(year + 1, 1, 1) - timedelta(days=1)
+
                 # For any other month
                 else:
+
                     # The last day is the day before the first day of the next month
                     last_day = datetime(year, month + 1, 1) - timedelta(days=1)
 
@@ -80,18 +75,15 @@ class Command(BaseCommand):
 
                 # Create a new MonthlyWaterConsumption record
                 monthly_record = MonthlyWaterConsumption.objects.create(
-                    # Set the date label (e.g., "June de 2025")
                     date_label=f"{first_day.strftime('%B')} de {year}",
-                    # Set the start date of the month
                     start_date=first_day,
-                    # Set the end date of the month
                     end_date=last_day,
-                    # Set the total consumption for the month
                     total_consumption=monthly_consumption
                 )
 
                 # Append the created record to the monthly_data list (optional)
                 monthly_data.append(monthly_record)
+
                 # Add the current month's consumption to the total for the bimester
                 total_consumed_in_period += monthly_consumption
 
@@ -103,6 +95,7 @@ class Command(BaseCommand):
 
             # Asynchronously call the Celery task to calculate bimonthly consumption based on the created monthly data
             bimonthly_water_consumption_task.delay()
+            
             # Write the total consumption for the generated bimester to standard output
             self.stdout.write(f"\n📊 Total do bimestre: {total_consumed_in_period.quantize(Decimal('0.01'))} m³")
 

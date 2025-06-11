@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Define the URL pattern for obtaining a JWT token pair (access and refresh tokens)
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('logout/', Logout.as_view(), name="logout"),
     # Define the URL pattern for refreshing an access token using a refresh token
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), # Assuming TokenRefreshView is from rest_framework_simplejwt.views
     # Include URL patterns from the alert_water_consumption app

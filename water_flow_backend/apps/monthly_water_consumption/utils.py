@@ -1,36 +1,35 @@
-# Import datetime and timedelta for date and time manipulations
+# Django and python Imports
 from datetime import datetime, timedelta
-# Import Decimal for precise arithmetic operations
 from decimal import Decimal
-# Import the logging module for recording events
 import logging
-# Import locale for internationalization and localization
 import locale
-
-# Import the MonthlyWaterConsumption model
-from apps.monthly_water_consumption.models import MonthlyWaterConsumption
-# Import the WeeklyWaterConsumption model
-from apps.weekly_water_consumption.models import WeeklyWaterConsumption
-# Import the base Exception class
 from builtins import Exception
+
+# Project Imports
+from apps.monthly_water_consumption.models import MonthlyWaterConsumption
+from apps.weekly_water_consumption.models import WeeklyWaterConsumption
 
 # Get a logger instance for the current module
 logger = logging.getLogger(__name__)
+
 # Set the locale to Brazilian Portuguese for time formatting
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 # Define a function to calculate monthly water consumption
 def monthly_water_consumption():
+
     # Start a try block to handle potential exceptions
     try:
 
         # Get the current date and time
         today = datetime.now()
+
         # Determine the first day of the current month
         first_day = today.replace(day=1)
 
         # Check if the current month is not December
         if today.month < 12:
+
             # Calculate the last day of the current month
             last_day = today.replace(month=today.month + 1, day = 1) - timedelta(days=1)
 
@@ -43,9 +42,7 @@ def monthly_water_consumption():
         
         # Fetch weekly consumption records that fall within the current month
         records = WeeklyWaterConsumption.objects.filter(
-            # Filter records where start_date is greater than or equal to the first day of the month
             start_date__gte=first_day,
-            # And end_date is less than or equal to the last day of the month
             end_date__lte=last_day
         # Order the records by their start date
         ).order_by('start_date')
@@ -64,14 +61,14 @@ def monthly_water_consumption():
 
         # Check if a monthly record already exists for this period
         if MonthlyWaterConsumption.objects.filter(
-            # Filter by the exact start date of the month
             start_date=first_day,
-            # Filter by the exact end date of the month
             end_date=last_day
         # Check if any such record exists
         ).exists(): 
+            
             # Log a warning if a record for this month already exists
             logger.warning(f"Registro para o mês {first_day.strftime('%B')} de {first_day.year} já existe.")
+
             # Return None if the record already exists
             return None
         
@@ -80,19 +77,17 @@ def monthly_water_consumption():
 
         # Create and return a new MonthlyWaterConsumption record
         return MonthlyWaterConsumption.objects.create(
-            # Set the descriptive label for the monthly consumption (e.g., "June de 2025")
             date_label=f"{first_day.strftime('%B')} de {first_day.year}",
-            # Set the start date of the monthly record
             start_date=first_day,
-            # Set the end date of the monthly record
             end_date=last_day,
-            # Set the total consumption
             total_consumption=formatted_consume
         )
 
     # Catch any exception that might occur during the process
     except Exception as e:
+
         # Log the exception with a message
         logger.exception(f'Falha ao calcular consumo mensal: {e}')
+        
         # Return None if an exception occurs
         return None

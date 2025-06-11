@@ -1,17 +1,14 @@
-# Import APIView for creating custom API endpoints (though not directly used as a base class here)
+# Django and Python Imports
 from rest_framework.views import APIView
-# Import status for HTTP status codes, generics for generic views, and response for API responses
 from rest_framework import status, generics, response
-# Import IsAuthenticated permission class to ensure user is logged in
 from rest_framework.permissions import IsAuthenticated
-# Import the WeeklyWaterConsumption model from the current app's models
+
+# Project Imports
 from .models import WeeklyWaterConsumption
-# Import the WeeklyWaterConsumptionSerializer from the current app's serializers
 from .serializers import WeeklyWaterConsumptionSerializer
 
 # Define a class-based view for listing weekly water consumption records
 class WeeklyWaterConsumptionView(generics.ListAPIView):
-    # Add a docstring to describe the API endpoint
     """
     API endpoint that allows viewing weekly water consumption records.
     Requires authentication.
@@ -19,23 +16,26 @@ class WeeklyWaterConsumptionView(generics.ListAPIView):
     
     # Specify the permission classes required to access this view
     permission_classes = (IsAuthenticated,)
+
     # Define the queryset to retrieve all WeeklyWaterConsumption objects, ordered by end_date descending
     queryset = WeeklyWaterConsumption.objects.all().order_by('-end_date')
+
     # Specify the serializer class to be used for this view
     serializer_class = WeeklyWaterConsumptionSerializer  
 
     # Define the handler for GET requests
     def get(self, request):
-        # Add a docstring to describe the GET method
+
         """
-        
         Handle GET request to list all weekly water consumption records.
         Returns:
             - 200 OK with serialized data on success
             - 400 Bad Request with error message on failure
         """
+
         # Start a try block to handle potential exceptions
         try:
+
             # Retrieve the queryset for this view (Note: comment refers to AlertWaterConsumption, but context is Weekly)
             queryset = self.get_queryset()
 
@@ -59,5 +59,6 @@ class WeeklyWaterConsumptionView(generics.ListAPIView):
         
         # Catch any exception that might occur
         except Exception as e:
+            
             # If an error occurs, return the error message with an HTTP 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)

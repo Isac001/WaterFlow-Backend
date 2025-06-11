@@ -1,4 +1,4 @@
-# Django Imports
+# Django and Python Imports
 import json
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from asgiref.sync import sync_to_async
@@ -56,6 +56,7 @@ class FlowReadingConsumer(AsyncJsonWebsocketConsumer):
             print("Error: 'flow_rate' not found in data")
             return
         
+        # Get the date and time of the flow_rating
         try:
 
             dt = datetime.strptime(times_tamp_str, "%d/%m/%Y %H:%M:%S")

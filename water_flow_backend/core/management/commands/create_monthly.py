@@ -1,14 +1,11 @@
-# Import Decimal for precise arithmetic operations
+# Django and Python Imports
 from decimal import Decimal
-# Import BaseCommand for creating custom management commands
 from django.core.management.base import BaseCommand
-# Import the WeeklyWaterConsumption model for creating test data
-from apps.weekly_water_consumption.models import WeeklyWaterConsumption
-# Import datetime and timedelta for date and time manipulations
 from datetime import datetime, timedelta
-# Import random for generating random numbers
 import random
-# Import the Celery task for monthly water consumption calculation
+
+# Project Imports
+from apps.weekly_water_consumption.models import WeeklyWaterConsumption
 from core.celery_tasks import monthly_water_consumption_task
 
 # Define a new management command by inheriting from BaseCommand
@@ -29,28 +26,28 @@ class Command(BaseCommand):
     # Define a method to generate weekly test data for an entire month
     def generate_monthly_test_data(self):
 
-        # Add a docstring to describe the method's purpose
-        """
-        Criando dados para teste mensal
-        """
-
         # Write a message to standard output indicating the start of this specific data generation step
         self.stdout.write("Gerando dados de teste mensal...")
 
         # Start a try block to handle potential exceptions
         try: 
+
             # Get the current date and time
             today = datetime.now()
+
             # Determine the first day of the current month
             first_day_in_month = today.replace(day=1)
 
             # Determine the last day of the current month
             # Check if the current month is December
             if today.month == 12:
+
                 # If December, the last day is December 31st
                 last_day_in_month = today.replace(year=today.year + 1, month=1, day=1) - timedelta(days=1)
+
             # For any other month
             else:
+
                 # The last day is the day before the first day of the next month
                 last_day_in_month = today.replace(month=today.month + 1, day=1) - timedelta(days=1)
         
@@ -68,6 +65,7 @@ class Command(BaseCommand):
 
                 # If the calculated end_week goes beyond the last day of the month, cap it
                 if date_end_week > last_day_in_month:
+
                     # Set the end_week to the last day of the month
                     date_end_week = last_day_in_month
 
@@ -88,13 +86,9 @@ class Command(BaseCommand):
 
                 # Create a new WeeklyWaterConsumption record for the current week
                 WeeklyWaterConsumption.objects.create(
-                    # Set the date label for the week
                     date_label=f"{start_week.strftime('%d/%m/%Y')} a {end_week.strftime('%d/%m/%Y')}",
-                    # Set the start date of the week
                     start_date=start_week,
-                    # Set the end date of the week
                     end_date=end_week,
-                    # Set the total consumption for the week
                     total_consumption=weekly_consumption
                 )
 
@@ -108,8 +102,10 @@ class Command(BaseCommand):
 
             # Asynchronously call the Celery task to calculate monthly consumption based on the generated weekly data
             monthly_water_consumption_task.delay()
+
             # Write a success message indicating the number of weeks generated
             self.stdout.write(f"\n✅ Dados gerados com sucesso para {len(weeks)} semanas!")
+            
             # Write the total consumption for the generated month to standard output
             self.stdout.write(f"📊 Total do mês: {total_consumed_in_month.quantize(Decimal('0.01'))} L/min")
             

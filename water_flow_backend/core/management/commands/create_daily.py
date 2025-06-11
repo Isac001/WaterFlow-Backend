@@ -1,15 +1,12 @@
-# Import BaseCommand for creating custom management commands
+# Django and Python Imports
 from django.core.management.base import BaseCommand
-# Import the FlowRating model
-from apps.flow_rating.models import FlowRating
-# Import datetime and timedelta for date and time manipulations
 from datetime import datetime, timedelta
-# Import random for generating random numbers
 import random
-# Import make_aware to create timezone-aware datetime objects
 from django.utils.timezone import make_aware
-# Import the celery task
+
+# Project Imports
 from core.celery_tasks.daily_water_consumption_task import daily_water_consumption_task
+from apps.flow_rating.models import FlowRating
 
 # Define a new management command by inheriting from BaseCommand
 class Command(BaseCommand):
