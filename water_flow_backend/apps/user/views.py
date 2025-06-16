@@ -19,30 +19,6 @@ from rest_framework_simplejwt.token_blacklist.models import (
 from .models import User
 from .serializers import *
 
-# Define a custom view for obtaining JWT token pairs
-class CustomTokenObtainPairVie(APIView): # Typo: should likely be CustomTokenObtainPairView
-
-    # Define the handler for POST requests
-    def post(self, request):
-
-        # Instantiate the custom token serializer with request data
-        serializer = CustomTokenObtainPairSerializer(data=request.data)
-
-        # Check if the serializer data is valid
-        if serializer.is_valid():
-
-            # Return the validated token data with a 200 OK status
-            return response.Response(serializer.validated_data, status=status.HTTP_200_OK)
-
-        # If serializer data is invalid, return errors with a 400 Bad Request status
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-# Define a custom view for refreshing JWT tokens, inheriting from TokenRefreshView
-class CustomTokenRefreshView(TokenRefreshView):
-    
-    # No custom logic needed, pass to inherit base functionality
-    pass
-
 # Define a view for listing all users
 class UserListView(generics.ListAPIView):
 
@@ -259,31 +235,4 @@ class UserDeleteView(generics.RetrieveDestroyAPIView):
             # Return a generic internal server error message with a 500 Internal Server Error status
             return response.Response({"ERROR": f"Internal server error: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Define a view to logout of user in the mobile app        
-class Logout(generics.CreateAPIView):
 
-    # If the user is authenticated, they will have access to the method
-    permission_classes = (IsAuthenticated, )
-
-    # Overriding the method
-    def post(self, request):
-
-        try:
-            
-            # Blacklist all outstanding tokens
-            tokens = OutstandingToken.objects.filter(user_id=request.user.id)
-
-            # For each token in the list blacklist it in the database
-            for token in tokens:
-                
-                # Blacklist the token
-                t, _ = BlacklistedToken.objects.get_or_create(token=token)
-
-            # Return a response with status HTTP 205 Reset Content
-            return response.Response(status=status.HTTP_205_RESET_CONTENT)
-
-        except TokenError:
-            
-            # Return a response with status HTTP 401 Unauthorized
-            return response.Response(status=status.HTTP_401_UNAUTHORIZED)
-    
