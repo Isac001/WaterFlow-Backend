@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 # Project imports
-from apps.user.managers import UserManager
+from core.authentication.managers import UserManager
 
 
 # Custom User model
