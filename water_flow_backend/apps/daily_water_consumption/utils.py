@@ -73,7 +73,7 @@ def calculate_daily_water_consumption():
         return DailyWaterConsumption.objects.create(
 
             # Set the label for the daily record, including the formatted date
-            date_label=f"Total de litros consumidos do dia {formatted_date}",
+            date_label=f"Dia {formatted_date}",
 
             # Set the total consumption in liters
             total_consumption=total_liters

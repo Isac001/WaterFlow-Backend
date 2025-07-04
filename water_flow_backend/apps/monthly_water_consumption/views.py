@@ -7,7 +7,9 @@ from rest_framework.permissions import IsAuthenticated
 # Import the MonthlyWaterConsumption model from the current app's models
 from .models import MonthlyWaterConsumption
 # Import the MonthlyWaterConsumptionSerializer from the current app's serializers
-from .serializers import MonthlyWaterConsumptionSerializer
+from .serializers import *
+
+from apps.weekly_water_consumption.models import WeeklyWaterConsumption
 
 # Define a class-based view for listing monthly water consumption records
 class MonthlyWaterConsumptionView(generics.ListAPIView):
@@ -60,3 +62,40 @@ class MonthlyWaterConsumptionView(generics.ListAPIView):
         except Exception as e:
             # If an error occurs, return the error message with an HTTP 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+
+
+class WeeksOnMonthDetail(generics.RetrieveAPIView):
+
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+
+        try:
+
+            try: 
+
+                monthly_record = MonthlyWaterConsumption.objects.get(pk=pk)
+
+            except MonthlyWaterConsumption.DoesNotExist:
+
+                return response.Response(
+                    data={"Message": "Register of the month not found"}, status=status.HTTP_404_NOT_FOUND
+                )
+            
+            weekly_records = WeeklyWaterConsumption.objects.filter(
+                start_date__gte = monthly_record.start_date,
+                end_date__lte = monthly_record.end_date
+            ).order_by('start_date')
+
+            serializer = WeeksOnTheMonthSerializer(weekly_records, many=True)
+
+            return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+
+             return response.Response(
+                data={"ERROR": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+
+

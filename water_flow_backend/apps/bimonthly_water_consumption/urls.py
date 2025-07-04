@@ -6,5 +6,6 @@ from .views import *
 # Define the list of URL patterns for the application
 urlpatterns = [
     # Map the root URL path to the BimonthlyWaterConsumptionView class-based view
-    path('', BimonthlyWaterConsumptionView.as_view(), name='bimonthly')
+    path('', BimonthlyWaterConsumptionView.as_view(), name='bimonthly'),
+    path('<int:pk>/', MonthsOnBimonthDetail.as_view(), name='detail-bimonthly')
 ]

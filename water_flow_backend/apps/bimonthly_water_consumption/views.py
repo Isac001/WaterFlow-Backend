@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 
 # Project Imports
 from .models import BimonthlyWaterConsumption
-from .serializers import BimonthlyWaterConsumptionSerializer
+from .serializers import *
+from apps.monthly_water_consumption.models import MonthlyWaterConsumption
 
 # Define a class-based view for listing bimonthly water consumption records
 class BimonthlyWaterConsumptionView(generics.ListAPIView):
@@ -59,3 +60,33 @@ class BimonthlyWaterConsumptionView(generics.ListAPIView):
             
             # If an error occurs, return the error message with an HTTP 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+        
+class MonthsOnBimonthDetail(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, pk):
+        try:
+            # Passo 1: Busca o registro do BIMESTRE com o 'pk' da URL.
+            try:
+                bimester_record = BimonthlyWaterConsumption.objects.get(pk=pk)
+            except BimonthlyWaterConsumption.DoesNotExist:
+                return response.Response(data={"Message": "Registro de Bimestre não existe"}, status=status.HTTP_404_NOT_FOUND)
+            
+            # Passo 2: Busca os MESES que estão DENTRO do período do bimestre.
+            # Esta consulta irá retornar uma lista de objetos MonthlyWaterConsumption.
+            # Ex: [ <Mês de Maio>, <Mês de Junho> ]
+            month_records = MonthlyWaterConsumption.objects.filter(
+                start_date__gte=bimester_record.start_date,
+                end_date__lte=bimester_record.end_date
+            ).order_by('start_date')
+
+            # Passo 3: Passa a LISTA de meses para o serializer.
+            # 'many=True' é crucial aqui, pois informa ao serializer que ele
+            # receberá múltiplos objetos para serializar.
+            serializer = MonthsOnBimonthlySerializer(month_records, many=True)
+
+            return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return response.Response(data={"ERRO": f"{str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+

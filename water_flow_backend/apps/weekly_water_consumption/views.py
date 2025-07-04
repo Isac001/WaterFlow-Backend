@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 # Project Imports
 from .models import WeeklyWaterConsumption
-from .serializers import WeeklyWaterConsumptionSerializer
+from .serializers import *
 
 # Define a class-based view for listing weekly water consumption records
 class WeeklyWaterConsumptionView(generics.ListAPIView):
@@ -62,3 +62,38 @@ class WeeklyWaterConsumptionView(generics.ListAPIView):
             
             # If an error occurs, return the error message with an HTTP 400 Bad Request status
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+   
+# Detail the days on week register
+class DaysOfWeekDetail(generics.RetrieveAPIView):
+
+    # Necessary user to be authenticated
+    permission_classes = (IsAuthenticated,)
+
+
+    # Detail Function
+    def get(self, request, pk):
+
+        try:
+
+            try:
+
+                weekly_record = WeeklyWaterConsumption.objects.get(pk=pk)
+
+            except WeeklyWaterConsumption.DoesNotExist:
+
+
+                return response.Response(data={"message": "Weekly record not found or does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            
+            daily_records = DailyWaterConsumption.objects.filter(
+                date_of_register__range=(weekly_record.start_date, weekly_record.end_date)
+            ).order_by('date_of_register')
+
+            serializer = DayOnWeekWaterConsumptionSerializer(daily_records, many=True)
+
+            return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+        except Exception as e:
+
+            return response.Response(data={"ERROR": f'{str(e)}'}, status=status.HTTP_404_NOT_FOUND)
+

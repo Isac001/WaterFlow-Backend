@@ -13,6 +13,8 @@ app = Celery('water_flow_backend', broker='redis://redis:6379/0')
 # Load Celery configuration from Django settings, using 'CELERY' as the namespace
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
+app.autodiscover_tasks()
+
 # Auto-discover task modules from a specific list of paths
 # This tells Celery where to find your @shared_task decorated functions
 app.autodiscover_tasks([

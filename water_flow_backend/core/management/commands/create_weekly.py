@@ -1,4 +1,4 @@
-# Django and Python Imports
+# Django Imports
 from django.core.management.base import BaseCommand
 from datetime import datetime, timedelta
 import random
@@ -6,69 +6,68 @@ from decimal import Decimal
 
 # Project Imports
 from apps.daily_water_consumption.models import DailyWaterConsumption
-from core.celery_tasks import weekly_water_consumption_task
+from apps.weekly_water_consumption.models import WeeklyWaterConsumption 
+from core.celery_tasks import weekly_water_consumption_task 
 
-# Define a new management command by inheriting from BaseCommand
 class Command(BaseCommand):
+    """
+    Comando que cria dados de teste diários e em seguida dispara a task
+    para calcular e criar o registro semanal correspondente.
+    """
+    help = 'Cria dados de teste diários e processa o registro semanal.'
 
-    # Define a help string for the command (Note: help string says FlowRating, but code generates DailyWaterConsumption)
-    help = 'Cria dados de teste para o modelo FlowRating' # Should be 'Cria dados de teste para DailyWaterConsumption para cálculo semanal'
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--days', type=int, default=7,
+            help='Define a quantidade de dias de dados de teste a serem gerados.'
+        )
+        parser.add_argument(
+            '--clean', action='store_true',
+            help='Limpa todos os dados diários e semanais antes de gerar novos.',
+        )
 
-    # Define the main logic of the command
     def handle(self, *args, **options):
-       
-        # Write a message to standard output indicating the start of the process
-        self.stdout.write("Iniciando a geração de dados de teste...")
+        days_to_generate = options['days']
+        clean_first = options['clean']
 
-        # Call the method to generate test data for weekly consumption calculation
-        self.generate_weekly_test_data()
+        self.stdout.write(self.style.NOTICE(f"Iniciando processo para gerar {days_to_generate} dias de dados..."))
 
-    # Define a method to generate daily test data for the past week
-    def generate_weekly_test_data(self):
+        if clean_first:
+            self.stdout.write("Opção --clean ativada. Limpando dados antigos...")
+            daily_count, _ = DailyWaterConsumption.objects.all().delete()
+            weekly_count, _ = WeeklyWaterConsumption.objects.all().delete()
+            self.stdout.write(self.style.SUCCESS(f"{daily_count} registros diários e {weekly_count} registros semanais foram apagados."))
 
-        # Write a message to standard output indicating the start of this specific data generation step
-        self.stdout.write("Gerando dados de teste semanal...")
+        # PASSO 1: Gera os dados de teste diários
+        self.generate_test_data(days_to_generate)
+        self.stdout.write(self.style.SUCCESS("\n✅ Dados de teste diários criados com sucesso!"))
 
-        # Start a try block to handle potential exceptions
+        # PASSO 2: Chama a task Celery para forçar o cálculo
+        self.stdout.write(self.style.NOTICE("\nDisparando a task Celery para calcular o registro semanal..."))
+        weekly_water_consumption_task.delay()
+        
+        self.stdout.write(self.style.SUCCESS("✅ Task agendada! O registro semanal será criado em segundo plano."))
+        self.stdout.write(self.style.NOTICE("Verifique os logs do Celery ou o banco de dados em alguns instantes."))
+
+
+    def generate_test_data(self, num_days):
         try:
-
-            # Get the current date as the end day for the data generation period
+            # Gera dados para os últimos `num_days` dias a partir da data de hoje
             end_day = datetime.now().date()
-
-            # Calculate the start day for the data generation period (6 days before the end_day, making a 7-day period)
-            start_day = end_day - timedelta(days=6)
             
-            # Write a message indicating the date range for which data is being generated
-            self.stdout.write(f"\nGerando dados de teste da semana de {start_day.strftime('%d/%m/%Y')} a {end_day.strftime('%d/%m/%Y')}...\n") # Corrected order of dates in log
+            self.stdout.write(f"\nGerando dados para o período de {(end_day - timedelta(days=num_days-1)).strftime('%d/%m/%Y')} a {end_day.strftime('%d/%m/%Y')}...\n")
 
-            # Loop 7 times to generate data for 7 days, including today
-            for days_ago in range(7):
-
-                # Calculate the specific date for the current iteration (from end_day backwards)
+            for days_ago in range(num_days):
                 current_date = end_day - timedelta(days=days_ago)
+                total_consumption = Decimal(random.uniform(500, 1500)).quantize(Decimal('0.00'))
 
-                # Generate a random total consumption value between 0 and 40000, quantized to two decimal places
-                total_consumption = Decimal(random.uniform(0, 40000)).quantize(Decimal('0.00'))  
-
-                # Create a new DailyWaterConsumption record for the current date
                 DailyWaterConsumption.objects.create(
-                    date_label=f"Total de litros consumidos do dia {current_date.strftime('%d de %B de %Y')}", 
-                    total_consumption=total_consumption
+                    date_label=f"Consumo do dia {current_date.strftime('%d/%m/%Y')}",
+                    total_consumption=total_consumption,
+                    date_of_register=current_date
                 )
 
-                # Write information about the generated daily data to standard output
-                self.stdout.write(
-                    f"Dia {current_date.strftime('%d/%m/%Y')}: {total_consumption} litros"
-                )
+                self.stdout.write(f"  -> Dia {current_date.strftime('%d/%m/%Y')}: {total_consumption} litros")
 
-            # Write a success message to standard output, styled as success
-            self.stdout.write(self.style.SUCCESS("\n✅ Dados de teste criados com sucesso! Iniciando task de consumo semanal..\n"))
-
-            # Asynchronously call the Celery task to calculate weekly consumption based on the generated daily data
-            weekly_water_consumption_task.delay()
-
-        # Catch any exception that occurs during the try block
         except Exception as e:
-            
-            # Write an error message to standard output, styled as error
             self.stdout.write(self.style.ERROR(f"\n❌ Erro ao criar dados de teste: {e}\n"))

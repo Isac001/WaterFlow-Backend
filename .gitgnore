@@ -1,5 +1,3 @@
 # Ignore files and floders in envoriment
 
 .env
-
-/env/

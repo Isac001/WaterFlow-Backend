@@ -59,6 +59,8 @@ class AlertWaterConsumption(models.Model):
         help_text=_("Porcentagem de consumo excedido em relação à média")
     )
 
+    is_viewed = models.BooleanField(default=False, verbose_name=_("Visualizado"))
+
     # Method to return a string representation of the alert
     def __str__(self):
         # A representação em string é executada em tempo real e geralmente 
