@@ -7,6 +7,7 @@ from .views import *
 # Defining URL patterns for the CRUD operations
 urlpatterns = [
 
-    path("", DailyWaterConsumptionView.as_view(), name="dialy")
+    path("", DailyWaterConsumptionListView.as_view(), name="dialy-list"),
+    path("<int:pk>/", DailyWaterConsumptionDetailView.as_view(), name="dialy-detail"),
     
 ]

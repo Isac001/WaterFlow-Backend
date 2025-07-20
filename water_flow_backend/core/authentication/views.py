@@ -57,7 +57,3 @@ class Logout(generics.CreateAPIView):
             
             # Return a response with status HTTP 401 Unauthorized
             return response.Response(status=status.HTTP_401_UNAUTHORIZED)
-    
-
-
-    

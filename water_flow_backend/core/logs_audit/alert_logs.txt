@@ -1,0 +1,885 @@
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 15:24:05]
+        ALERTA CRIADO - ID: 1
+        Tipo: EXTREME
+        Excesso: 921.76
+        Percentual: 111.28%
+      TASK FINALIZADA!  | [14-07-2025 15:24:05]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 15:50:07]
+        ALERTA CRIADO - ID: 2
+        Tipo: EXTREME
+        Excesso: 1136.19
+        Percentual: 109.65%
+      TASK FINALIZADA!  | [14-07-2025 15:50:07]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 15:50:14]
+        ALERTA CRIADO - ID: 3
+        Tipo: EXTREME
+        Excesso: 900.94
+        Percentual: 72.02%
+      TASK FINALIZADA!  | [14-07-2025 15:50:14]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 15:50:19]
+        ALERTA CRIADO - ID: 4
+        Tipo: VERY_HIGH
+        Excesso: 549.04
+        Percentual: 38.64%
+      TASK FINALIZADA!  | [14-07-2025 15:50:19]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:30:55]
+        ALERTA CRIADO - ID: 5
+        Tipo: HIGH
+        Excesso: 453.38
+        Percentual: 27.79%
+      TASK FINALIZADA!  | [14-07-2025 16:30:55]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:30:58]
+        ALERTA CRIADO - ID: 6
+        Tipo: HIGH
+        Excesso: 331.36
+        Percentual: 17.84%
+      TASK FINALIZADA!  | [14-07-2025 16:30:58]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:31:00]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [14-07-2025 16:31:01]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:31:03]
+        ALERTA CRIADO - ID: 7
+        Tipo: HIGH
+        Excesso: 36.81
+        Percentual: 1.75%
+      TASK FINALIZADA!  | [14-07-2025 16:31:03]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:36:52]
+        ALERTA CRIADO - ID: 8
+        Tipo: HIGH
+        Excesso: 17.42
+        Percentual: 0.83%
+      TASK FINALIZADA!  | [14-07-2025 16:36:52]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:36:55]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [14-07-2025 16:36:55]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:36:58]
+        ALERTA CRIADO - ID: 9
+        Tipo: HIGH
+        Excesso: 154.34
+        Percentual: 7.65%
+      TASK FINALIZADA!  | [14-07-2025 16:36:58]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [14-07-2025 16:37:02]
+        ALERTA CRIADO - ID: 10
+        Tipo: HIGH
+        Excesso: 181.21
+        Percentual: 9.20%
+      TASK FINALIZADA!  | [14-07-2025 16:37:02]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:50:31]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:50:31]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:50:35]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:50:35]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:50:37]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:50:37]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:54:27]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:54:27]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:55:06]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:55:06]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:57:00]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:57:00]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:57:04]
+        ALERTA CRIADO - ID: 11
+        Tipo: HIGH
+        Excesso: 26.02
+        Percentual: 1.37%
+      TASK FINALIZADA!  | [15-07-2025 14:57:04]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 14:57:07]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 14:57:07]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:50:26]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:50:26]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:50:29]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:50:29]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:50:32]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:50:32]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:50:35]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:50:35]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:50:45]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:50:45]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:50:48]
+        ALERTA CRIADO - ID: 12
+        Tipo: HIGH
+        Excesso: 27.83
+        Percentual: 1.38%
+      TASK FINALIZADA!  | [15-07-2025 15:50:48]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:51:47]
+        ALERTA CRIADO - ID: 13
+        Tipo: HIGH
+        Excesso: 58.35
+        Percentual: 2.90%
+      TASK FINALIZADA!  | [15-07-2025 15:51:47]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:51:50]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:51:50]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:51:52]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:51:52]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:52:07]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 15:52:07]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 15:52:15]
+        ALERTA CRIADO - ID: 14
+        Tipo: HIGH
+        Excesso: 19.02
+        Percentual: 1.00%
+      TASK FINALIZADA!  | [15-07-2025 15:52:15]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:21:49]
+        ALERTA CRIADO - ID: 15
+        Tipo: HIGH
+        Excesso: 22.59
+        Percentual: 1.19%
+      TASK FINALIZADA!  | [15-07-2025 16:21:49]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:21:52]
+        ALERTA CRIADO - ID: 16
+        Tipo: HIGH
+        Excesso: 27.11
+        Percentual: 1.43%
+      TASK FINALIZADA!  | [15-07-2025 16:21:52]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:21:58]
+        ALERTA CRIADO - ID: 17
+        Tipo: HIGH
+        Excesso: 7.56
+        Percentual: 0.39%
+      TASK FINALIZADA!  | [15-07-2025 16:21:58]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:26:23]
+        ALERTA CRIADO - ID: 18
+        Tipo: HIGH
+        Excesso: 55.81
+        Percentual: 2.98%
+      TASK FINALIZADA!  | [15-07-2025 16:26:23]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:26:27]
+        ALERTA CRIADO - ID: 19
+        Tipo: HIGH
+        Excesso: 21.81
+        Percentual: 1.14%
+      TASK FINALIZADA!  | [15-07-2025 16:26:27]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:35:06]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:35:06]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:35:10]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:35:10]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:35:12]
+        ALERTA CRIADO - ID: 20
+        Tipo: HIGH
+        Excesso: 23.73
+        Percentual: 1.25%
+      TASK FINALIZADA!  | [15-07-2025 16:35:12]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:36:39]
+        ALERTA CRIADO - ID: 21
+        Tipo: HIGH
+        Excesso: 169.70
+        Percentual: 8.94%
+      TASK FINALIZADA!  | [15-07-2025 16:36:39]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:36:42]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:36:42]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:36:45]
+        ALERTA CRIADO - ID: 22
+        Tipo: HIGH
+        Excesso: 284.41
+        Percentual: 14.86%
+      TASK FINALIZADA!  | [15-07-2025 16:36:45]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:37:23]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:37:23]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:37:33]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:37:33]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:37:48]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:37:48]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:38:09]
+        ALERTA CRIADO - ID: 23
+        Tipo: HIGH
+        Excesso: 115.21
+        Percentual: 6.00%
+      TASK FINALIZADA!  | [15-07-2025 16:38:09]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:38:12]
+        ALERTA CRIADO - ID: 24
+        Tipo: HIGH
+        Excesso: 85.45
+        Percentual: 4.54%
+      TASK FINALIZADA!  | [15-07-2025 16:38:13]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:39:10]
+        ALERTA CRIADO - ID: 25
+        Tipo: HIGH
+        Excesso: 31.81
+        Percentual: 1.68%
+      TASK FINALIZADA!  | [15-07-2025 16:39:10]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:39:13]
+        ALERTA CRIADO - ID: 26
+        Tipo: HIGH
+        Excesso: 56.40
+        Percentual: 3.01%
+      TASK FINALIZADA!  | [15-07-2025 16:39:13]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:43:43]
+        ALERTA CRIADO - ID: 27
+        Tipo: HIGH
+        Excesso: 9.88
+        Percentual: 0.52%
+      TASK FINALIZADA!  | [15-07-2025 16:43:43]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:20]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:20]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:23]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:23]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:26]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:26]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:37]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:37]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:39]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:39]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:44]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:44]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:49]
+        ALERTA CRIADO - ID: 28
+        Tipo: HIGH
+        Excesso: 6.73
+        Percentual: 0.35%
+      TASK FINALIZADA!  | [15-07-2025 16:45:49]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:51]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:51]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:54]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:54]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:45:56]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:45:56]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:46:10]
+        ALERTA CRIADO - ID: 29
+        Tipo: HIGH
+        Excesso: 17.77
+        Percentual: 0.93%
+      TASK FINALIZADA!  | [15-07-2025 16:46:10]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:48:39]
+        ALERTA CRIADO - ID: 30
+        Tipo: HIGH
+        Excesso: 8.09
+        Percentual: 0.42%
+      TASK FINALIZADA!  | [15-07-2025 16:48:39]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:48:41]
+        ALERTA CRIADO - ID: 31
+        Tipo: HIGH
+        Excesso: 18.29
+        Percentual: 0.96%
+      TASK FINALIZADA!  | [15-07-2025 16:48:41]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:48:44]
+        ALERTA CRIADO - ID: 32
+        Tipo: HIGH
+        Excesso: 8.98
+        Percentual: 0.47%
+      TASK FINALIZADA!  | [15-07-2025 16:48:44]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 16:48:48]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 16:48:48]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:05:45]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:05:45]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:05:49]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:05:49]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:05:52]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:05:52]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:05:59]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:05:59]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:06:02]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:06:02]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:06:34]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:06:34]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:01]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:01]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:05]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:05]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:32]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:32]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:35]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:35]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:37]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:37]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:42]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:42]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:07:48]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:07:48]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:11:07]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:11:08]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:11:10]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:11:10]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:11:17]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:11:17]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:11:19]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:11:19]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:11:21]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:11:21]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:11:23]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:11:23]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:12:56]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:12:56]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:12:58]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:12:58]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:13:01]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:13:01]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:13:03]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:13:03]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:13:18]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:13:18]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:13:26]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:13:26]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:13:29]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:13:29]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:13:53]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:13:53]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:01]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:14:01]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:05]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:14:05]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:17]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:14:17]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:20]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:14:20]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:28]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:14:28]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:32]
+        ALERTA CRIADO - ID: 33
+        Tipo: HIGH
+        Excesso: 216.84
+        Percentual: 11.01%
+      TASK FINALIZADA!  | [15-07-2025 17:14:32]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:36]
+        ALERTA CRIADO - ID: 34
+        Tipo: HIGH
+        Excesso: 157.52
+        Percentual: 8.04%
+      TASK FINALIZADA!  | [15-07-2025 17:14:36]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:42]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:14:42]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:14:48]
+        ALERTA CRIADO - ID: 35
+        Tipo: HIGH
+        Excesso: 82.99
+        Percentual: 4.25%
+      TASK FINALIZADA!  | [15-07-2025 17:14:48]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:15:38]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:15:38]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:15:41]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:15:41]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:15:44]
+        ALERTA CRIADO - ID: 36
+        Tipo: HIGH
+        Excesso: 39.90
+        Percentual: 2.00%
+      TASK FINALIZADA!  | [15-07-2025 17:15:44]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:15:54]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:15:54]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:15:57]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:15:57]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:16:17]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:16:17]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:16:19]
+        ALERTA CRIADO - ID: 37
+        Tipo: HIGH
+        Excesso: 137.64
+        Percentual: 6.83%
+      TASK FINALIZADA!  | [15-07-2025 17:16:19]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:16:23]
+        ALERTA CRIADO - ID: 38
+        Tipo: HIGH
+        Excesso: 61.14
+        Percentual: 3.07%
+      TASK FINALIZADA!  | [15-07-2025 17:16:23]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:16:26]
+        ALERTA CRIADO - ID: 39
+        Tipo: HIGH
+        Excesso: 159.44
+        Percentual: 7.92%
+      TASK FINALIZADA!  | [15-07-2025 17:16:26]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:35:53]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:35:53]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:36:20]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:36:20]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:36:28]
+        ALERTA CRIADO - ID: 40
+        Tipo: HIGH
+        Excesso: 112.07
+        Percentual: 5.84%
+      TASK FINALIZADA!  | [15-07-2025 17:36:28]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:36:31]
+        ALERTA CRIADO - ID: 41
+        Tipo: HIGH
+        Excesso: 45.86
+        Percentual: 2.41%
+      TASK FINALIZADA!  | [15-07-2025 17:36:31]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:41:16]
+        Nenhum consumo excessivo detectado
+      TASK FINALIZADA!  | [15-07-2025 17:41:16]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:41:20]
+        ALERTA CRIADO - ID: 42
+        Tipo: HIGH
+        Excesso: 115.33
+        Percentual: 6.13%
+      TASK FINALIZADA!  | [15-07-2025 17:41:20]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:41:25]
+        ALERTA CRIADO - ID: 43
+        Tipo: HIGH
+        Excesso: 56.04
+        Percentual: 2.93%
+      TASK FINALIZADA!  | [15-07-2025 17:41:25]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:41:32]
+        ALERTA CRIADO - ID: 44
+        Tipo: HIGH
+        Excesso: 31.07
+        Percentual: 1.60%
+      TASK FINALIZADA!  | [15-07-2025 17:41:32]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:42:27]
+        ALERTA CRIADO - ID: 45
+        Tipo: HIGH
+        Excesso: 112.26
+        Percentual: 5.69%
+      TASK FINALIZADA!  | [15-07-2025 17:42:27]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:42:29]
+        ALERTA CRIADO - ID: 46
+        Tipo: HIGH
+        Excesso: 22.53
+        Percentual: 1.18%
+      TASK FINALIZADA!  | [15-07-2025 17:42:29]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:42:40]
+        ALERTA CRIADO - ID: 47
+        Tipo: HIGH
+        Excesso: 192.17
+        Percentual: 10.10%
+      TASK FINALIZADA!  | [15-07-2025 17:42:40]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:42:43]
+        ALERTA CRIADO - ID: 48
+        Tipo: HIGH
+        Excesso: 1.01
+        Percentual: 0.05%
+      TASK FINALIZADA!  | [15-07-2025 17:42:43]
+}
+
+{
+      TASK INICIADA: Verificação de alertas de consumo de água | [15-07-2025 17:42:45]
+        ALERTA CRIADO - ID: 49
+        Tipo: HIGH
+        Excesso: 118.33
+        Percentual: 6.27%
+      TASK FINALIZADA!  | [15-07-2025 17:42:45]
+}
+

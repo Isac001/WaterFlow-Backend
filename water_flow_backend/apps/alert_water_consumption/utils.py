@@ -26,6 +26,8 @@ def parse_date_label(date_label):
                 logger.warning(f"Failed to parse date_label: {date_label}")
 
                 return None
+
+                
             
             # Catch the day, month name, and year from the match
             day = int(match.group(1))

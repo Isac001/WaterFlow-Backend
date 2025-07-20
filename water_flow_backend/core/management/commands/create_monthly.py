@@ -1,120 +1,127 @@
-# Django and Python Imports
-from decimal import Decimal
+# Django Imports
 from django.core.management.base import BaseCommand
+from django.db.models import Sum
 from datetime import datetime, timedelta
+from calendar import monthrange
 import random
+from decimal import Decimal
 
-# Project Imports
+# Models
+from apps.daily_water_consumption.models import DailyWaterConsumption
 from apps.weekly_water_consumption.models import WeeklyWaterConsumption
+from apps.monthly_water_consumption.models import MonthlyWaterConsumption
+
+# Celery Task (Apenas a mensal é necessária agora)
 from core.celery_tasks import monthly_water_consumption_task
 
-# Define a new management command by inheriting from BaseCommand
 class Command(BaseCommand):
+    """
+    Comando para gerar um conjunto de dados completo (diário e semanal) para um mês
+    e, ao final, disparar a task de cálculo mensal.
+    """
+    help = 'Gera dados diários e semanais, e então dispara a task de cálculo mensal.'
 
-    # Define a help string for the command
-    help = 'Gera dados falsos de consumo de água semanal para teste de consumo mensal'
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--month',
+            type=str,
+            help='Define o mês para gerar dados (formato YYYY-MM). Ex: --month 2025-06. Se não for fornecido, usa o mês anterior.',
+        )
+        parser.add_argument(
+            '--clean',
+            action='store_true',
+            help='Limpa todos os dados (diários, semanais, mensais) antes de gerar novos.',
+        )
 
-    # Define the main logic of the command
-    def handle(self, *args, **kwargs):
-
-        # Write a message to standard output indicating the start of the process
-        self.stdout.write("Iniciando a geração de dados de teste...")
-
-        # Call the method to generate test data for monthly consumption calculation
-        self.generate_monthly_test_data()
-
-    # Define a method to generate weekly test data for an entire month
-    def generate_monthly_test_data(self):
-
-        # Write a message to standard output indicating the start of this specific data generation step
-        self.stdout.write("Gerando dados de teste mensal...")
-
-        # Start a try block to handle potential exceptions
-        try: 
-
-            # Get the current date and time
-            today = datetime.now()
-
-            # Determine the first day of the current month
-            first_day_in_month = today.replace(day=1)
-
-            # Determine the last day of the current month
-            # Check if the current month is December
-            if today.month == 12:
-
-                # If December, the last day is December 31st
-                last_day_in_month = today.replace(year=today.year + 1, month=1, day=1) - timedelta(days=1)
-
-            # For any other month
-            else:
-
-                # The last day is the day before the first day of the next month
-                last_day_in_month = today.replace(month=today.month + 1, day=1) - timedelta(days=1)
+    def handle(self, *args, **options):
+        # --- PASSO 1: Determinar o mês e as datas ---
+        self.stdout.write(self.style.NOTICE("🚀 Iniciando geração de dados mocados..."))
         
-            # Initialize an empty list to store week start and end date tuples
-            weeks = []
+        today = datetime.now().date()
+        if options['month']:
+            try:
+                first_day_of_month = datetime.strptime(options['month'], '%Y-%m').date()
+            except ValueError:
+                self.stdout.write(self.style.ERROR("Formato de data inválido. Use YYYY-MM."))
+                return
+        else:
+            first_day_of_month = (today.replace(day=1) - timedelta(days=1)).replace(day=1)
 
-            # Set the start of the first week to the first day of the month
-            start_week = first_day_in_month
+        _, num_days_in_month = monthrange(first_day_of_month.year, first_day_of_month.month)
+        last_day_of_month = first_day_of_month + timedelta(days=num_days_in_month - 1)
 
-            # Loop as long as the start_week is within the current month
-            while start_week <= last_day_in_month:
+        self.stdout.write(self.style.NOTICE(f"Mês alvo: {first_day_of_month.strftime('%B de %Y')}"))
 
-                # Calculate the potential end of the current week (6 days after start)
-                date_end_week = start_week + timedelta(days=6)
+        # --- PASSO 2: Limpar dados antigos ---
+        if options['clean']:
+            self.stdout.write("Opção --clean ativada. Limpando todos os dados antigos...")
+            daily_count, _ = DailyWaterConsumption.objects.all().delete()
+            weekly_count, _ = WeeklyWaterConsumption.objects.all().delete()
+            monthly_count, _ = MonthlyWaterConsumption.objects.all().delete()
+            self.stdout.write(self.style.SUCCESS(f"{daily_count} diários, {weekly_count} semanais e {monthly_count} mensais foram apagados."))
 
-                # If the calculated end_week goes beyond the last day of the month, cap it
-                if date_end_week > last_day_in_month:
+        # --- PASSO 3: Gerar novos dados diários ---
+        self.stdout.write(self.style.NOTICE(f"\nGerando {num_days_in_month} registros diários..."))
+        self._generate_daily_data(first_day_of_month, last_day_of_month)
+        self.stdout.write(self.style.SUCCESS("✅ Dados diários criados com sucesso!"))
 
-                    # Set the end_week to the last day of the month
-                    date_end_week = last_day_in_month
+        # --- PASSO 4: Calcular e criar os registros semanais DIRETAMENTE ---
+        self.stdout.write(self.style.NOTICE("\nCalculando e criando os registros semanais..."))
+        self._calculate_and_create_weekly_data(first_day_of_month, last_day_of_month)
+        
+        # --- PASSO 5: Disparar task para o cálculo mensal ---
+        self.stdout.write(self.style.NOTICE("\nDisparando task para o cálculo mensal..."))
+        monthly_water_consumption_task.delay()
+        self.stdout.write(self.style.SUCCESS(f"✅ Task mensal para {first_day_of_month.strftime('%B de %Y')} disparada."))
 
-                # Add the (start_week, end_week) tuple to the list of weeks
-                weeks.append((start_week, date_end_week))
+        self.stdout.write(self.style.SUCCESS("\n🎉 Processo concluído! Verifique os logs do Celery para acompanhar o cálculo mensal."))
 
-                # Set the start of the next week to the day after the current end_week
-                start_week = date_end_week + timedelta(days=1)
+    def _generate_daily_data(self, start_date, end_date):
+        """Cria registros diários para um intervalo de datas."""
+        current_date = start_date
+        while current_date <= end_date:
+            # Evita duplicatas se a opção --clean não for usada
+            if not DailyWaterConsumption.objects.filter(date_of_register=current_date).exists():
+                total_consumption = Decimal(random.uniform(500, 1500)).quantize(Decimal('0.00'))
+                DailyWaterConsumption.objects.create(
+                    date_label=f"Consumo do dia {current_date.strftime('%d/%m/%Y')}",
+                    total_consumption=total_consumption,
+                    date_of_register=current_date
+                )
+            current_date += timedelta(days=1)
 
-            # Initialize the total consumed in the month to zero
-            total_consumed_in_month = Decimal('0.00')
+    def _calculate_and_create_weekly_data(self, first_day, last_day):
+        """
+        Calcula e cria os registros semanais com base nos dados diários existentes.
+        Este método substitui a necessidade de tasks semanais.
+        """
+        week_start_date = first_day
+        current_date = first_day
+        
+        while current_date <= last_day:
+            # Uma semana termina no Domingo (weekday == 6) ou no último dia do mês
+            if current_date.weekday() == 6 or current_date == last_day:
+                week_end_date = current_date
 
-            # Loop through each calculated week with an index
-            for i, (start_week, end_week) in enumerate(weeks):
-
-                # Generate a random weekly consumption value between 500 and 1500
-                weekly_consumption = Decimal(random.randint(500, 1500)).quantize(Decimal('0.01'))
-
-                # Create a new WeeklyWaterConsumption record for the current week
-                WeeklyWaterConsumption.objects.create(
-                    date_label=f"{start_week.strftime('%d/%m/%Y')} a {end_week.strftime('%d/%m/%Y')}",
-                    start_date=start_week,
-                    end_date=end_week,
-                    total_consumption=weekly_consumption
+                # Filtra os dias da semana atual
+                daily_records = DailyWaterConsumption.objects.filter(
+                    date_of_register__range=(week_start_date, week_end_date)
                 )
 
-                # Add the current week's consumption to the total for the month
-                total_consumed_in_month += weekly_consumption
+                if daily_records.exists():
+                    # Calcula o total usando a agregação do Django (muito eficiente)
+                    total_volume = daily_records.aggregate(total=Sum('total_consumption'))['total'] or Decimal('0.0')
 
-                # Write information about the generated weekly data to standard output
-                self.stdout.write(
-                    f"Semana {i+1}: {start_week.strftime('%d/%m/%Y')} a {end_week.strftime('%d/%m/%Y')}, Consumo: {weekly_consumption} L/min" # Corrected index to i+1 for 1-based week number
-                )
+                    # Cria o registro semanal
+                    WeeklyWaterConsumption.objects.create(
+                        date_label=f"Consumo da semana de {week_start_date.strftime('%d/%m/%Y')} a {week_end_date.strftime('%d/%m/%Y')}",
+                        start_date=week_start_date,
+                        end_date=week_end_date,
+                        total_consumption=total_volume
+                    )
+                    self.stdout.write(self.style.SUCCESS(f"  -> Semana de {week_start_date.strftime('%d/%m')} a {week_end_date.strftime('%d/%m')} criada."))
 
-            # Asynchronously call the Celery task to calculate monthly consumption based on the generated weekly data
-            monthly_water_consumption_task.delay()
+                # Prepara a data de início para a próxima semana
+                week_start_date = current_date + timedelta(days=1)
 
-            # Write a success message indicating the number of weeks generated
-            self.stdout.write(f"\n✅ Dados gerados com sucesso para {len(weeks)} semanas!")
-            
-            # Write the total consumption for the generated month to standard output
-            self.stdout.write(f"📊 Total do mês: {total_consumed_in_month.quantize(Decimal('0.01'))} L/min")
-            
-
-        # Catch any exception that occurs during the try block
-        except Exception as e:
-
-            # Write an error message to standard output, styled as an error
-            self.stdout.write(self.style.ERROR(f"Erro ao gerar dados de teste: {e}"))
-
-            # Re-raise the caught exception
-            raise
+            current_date += timedelta(days=1)

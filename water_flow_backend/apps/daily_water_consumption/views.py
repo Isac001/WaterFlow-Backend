@@ -8,7 +8,7 @@ from .serializers import DailyWaterConsumptionSerializer
 from .models import DailyWaterConsumption  
 
 # Define a class-based view for listing daily water consumption records
-class DailyWaterConsumptionView(generics.ListAPIView):
+class DailyWaterConsumptionListView(generics.ListAPIView):
 
     """
     API endpoint that allows viewing daily water consumption records.
@@ -62,4 +62,35 @@ class DailyWaterConsumptionView(generics.ListAPIView):
         except Exception as e:
 
             # If an error occurs, return the error message with an HTTP 400 Bad Request status
+            return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+        
+
+class DailyWaterConsumptionDetailView(generics.RetrieveAPIView):
+
+    # Specify the permission classes required to access this view
+    permission_classes = (IsAuthenticated,)
+    
+    # Define the queryset to retrieve all DailyWaterConsumption objects, ordered by date_of_register ascending
+    queryset = DailyWaterConsumption.objects.all().order_by('-date_of_register')
+    
+    # Specify the serializer class to be used for this view
+    serializer_class = DailyWaterConsumptionSerializer
+
+    def get(self, request, pk):
+
+        daily_water_consumption = self.get_queryset(pk=pk)
+
+
+        serializer = self.serializer_class(daily_water_consumption)
+
+        try:
+
+            if serializer.is_valid():
+                return response.Response(serializer.data, status=status.HTTP_200_OK)
+            
+            else:
+                return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        except Exception as e:
+
             return response.Response(str(e), status=status.HTTP_400_BAD_REQUEST)

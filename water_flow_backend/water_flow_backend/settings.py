@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # Django REST framework for building APIs
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
 
     # Custom project apps
     'apps.flow_rating',
